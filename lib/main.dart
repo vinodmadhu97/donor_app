@@ -78,6 +78,7 @@ class UpComingScreen extends StatelessWidget {
 
   Widget getScreen(){
     if(!Constants.isInstalled){
+      print(Constants.isInstalled);
       return OnBoardingScreen();
     }else{
       return Home();

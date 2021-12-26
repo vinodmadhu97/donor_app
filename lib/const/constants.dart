@@ -28,15 +28,17 @@ class Constants{
 
   }
 
-  Future<bool> getAppInstalledDataInSF(String key) async {
+  Future<void> getAppInstalledDataInSF(String key) async {
     final SharedPreferences prefs = await _mSF;
 
-
-
     if(prefs.containsKey(key)){
-      return true;
+      //return true;
+      isInstalled = true;
+    }else{
+      isInstalled = false;
     }
-    return false;
+    //return false;
+
 
   }
 
