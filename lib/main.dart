@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       future: Init.instance.initialize(),
         builder: (context, AsyncSnapshot snapshot){
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Splash();
+            return SplashLoading();
           }
             return UpComingScreen();
         }
@@ -49,16 +49,20 @@ class Init {
   }
 }
 
-class Splash extends StatelessWidget {
-  const Splash({Key? key}) : super(key: key);
+class SplashLoading extends StatelessWidget {
+  const SplashLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Constants.appColorBrownRed,
+      backgroundColor: Constants.appColorWhite,
       body: Center(
-        child: Image.asset("assets/icons/logo.png",height: 80,width: 80,),
+        child: CircularProgressIndicator(
+          backgroundColor: Constants.appColorWhite,
+          //color: Constants.appColorBrownRed,
+         valueColor: AlwaysStoppedAnimation<Color>(Constants.appColorBrownRed),
+        ),
       ),
     );
   }
