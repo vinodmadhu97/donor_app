@@ -1,3 +1,5 @@
+import 'package:donor_app/screens/auth/register_screen.dart';
+import 'package:donor_app/screens/auth/sign_up_screen.dart';
 import 'package:donor_app/screens/main/home.dart';
 import 'package:donor_app/screens/startup/onboarding_screen.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +8,8 @@ import 'package:flutter/services.dart';
 import 'const/constants.dart';
 
 void main() {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
+  /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);*/
   runApp(const MyApp());
 }
 
@@ -22,10 +24,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
-        primarySwatch: Colors.blue,
+        fontFamily: "Kanit-bold",
+        appBarTheme: AppBarTheme(color: Constants.appColorBrownRed),
+        primaryColor: Constants.appColorBrownRed,
+        primarySwatch: Constants.appColorbrownRedSwatch
       ),
-      home: FutureBuilder(
+      home: RegisterScreen()/*FutureBuilder(
       future: Init.instance.initialize(),
         builder: (context, AsyncSnapshot snapshot){
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -33,7 +37,7 @@ class MyApp extends StatelessWidget {
           }
             return UpComingScreen();
         }
-      )
+      )*/
     );
   }
 }
@@ -81,7 +85,7 @@ class UpComingScreen extends StatelessWidget {
       print(Constants.isInstalled);
       return OnBoardingScreen();
     }else{
-      return Home();
+      return SignUpScreen();
     }
   }
 }

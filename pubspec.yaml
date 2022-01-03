@@ -38,6 +38,13 @@ dependencies:
   overlay_support: ^1.2.1
   internet_connection_checker: ^0.0.1+3
   introduction_screen: ^2.1.0
+  form_field_validator: ^1.1.0
+  draggable_home: ^1.0.2
+  permission_handler: ^8.3.0
+  fluttertoast: ^8.0.8
+  image_picker: ^0.8.4+4
+  url_launcher: ^6.0.17
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
