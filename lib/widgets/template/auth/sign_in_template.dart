@@ -1,9 +1,12 @@
+import 'package:donor_app/const/auth_exception_handler.dart';
+import 'package:donor_app/const/auth_result_status_enum.dart';
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
 import 'package:donor_app/screens/auth/sign_in_screen.dart';
 import 'package:donor_app/screens/auth/sign_up_screen.dart';
 import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/widgets/molecules/buttons/filled_rounded_button.dart';
+import 'package:donor_app/widgets/molecules/containers/loading_indicator.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_input_field.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_password_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,6 +30,9 @@ class _SignInTemplateState extends State<SignInTemplate> {
   TextEditingController _passwordController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isLoading = false;
+  AuthResultStatus? _status;
+  String? errorMsg;
 
   void _login() async{
 
@@ -43,8 +49,15 @@ class _SignInTemplateState extends State<SignInTemplate> {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>const HomeScreen()));
       }
     }).catchError((error){
-      Navigator.pop(context);
+      print('Exception @createAccount: ${error.code}');
+      _status = AuthExceptionHandler.handleException(error);
+      errorMsg = AuthExceptionHandler.generateExceptionMessage(_status);
+      Constants().showToast(errorMsg!);
       //todo show error
+    });
+
+    setState(() {
+      isLoading = false;
     });
 
 
@@ -52,9 +65,8 @@ class _SignInTemplateState extends State<SignInTemplate> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading ? LoadingIndicator() : Scaffold(
       body: Container(
-
         child: Column(
           children: [
             Container(
@@ -141,6 +153,9 @@ class _SignInTemplateState extends State<SignInTemplate> {
                                 print(_passwordController.text.toString());
 
                                 //MOVING TO THE HOME IF DATA VALIDATED
+                                setState(() {
+                                  isLoading = true;
+                                });
                                 _login();
                               }
 

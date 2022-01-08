@@ -94,9 +94,12 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
         .collection('donors')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set(userData)
-        .then((value) => Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen())));
+        .then((value){
+
+          Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));});
   }
+
 
   @override
   Widget build(BuildContext context) {

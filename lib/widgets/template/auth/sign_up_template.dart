@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donor_app/const/auth_exception_handler.dart';
 import 'package:donor_app/const/auth_result_status_enum.dart';
@@ -7,6 +9,7 @@ import 'package:donor_app/screens/auth/register_screen.dart';
 import 'package:donor_app/screens/auth/sign_in_screen.dart';
 import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/widgets/molecules/buttons/filled_rounded_button.dart';
+import 'package:donor_app/widgets/molecules/containers/loading_indicator.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_input_field.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_password_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,7 +42,9 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String userId = "";
   String userEmail = "";
-  String? _status;
+  AuthResultStatus? _status;
+  String? errorMsg;
+  bool isLoading = false;
 
   void signUpUser()async{
 
@@ -56,30 +61,22 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
         print("register");
       }
 
-    }catch(e){
-      print('Exception @createAccount: $e');
-      _status = AuthExceptionHandler.generateExceptionMessage(e);
-      Constants().showToast(_status!);
+    }catch(error){
+      _status = AuthExceptionHandler.handleException(error);
+      errorMsg = AuthExceptionHandler.generateExceptionMessage(_status);
+      Constants().showToast(errorMsg!);
     }
 
 
-
+    setState(() {
+      isLoading = false;
+    });
 
   }
 
-  /*void saveUserData(){
-    Map<String,dynamic> userData = {
-
-      'uId' : userId,
-      'userEmail' : userEmail,
-    };
-
-    FirebaseFirestore.instance.collection('donors').doc(userId).set(userData);
-  }*/
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading ? LoadingIndicator() : Scaffold(
       body: Container(
 
         child: Column(
@@ -209,6 +206,9 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
                                 print(_passwordController.text.toString());
 
                                 //MOVING TO THE HOME IF DATA VALIDATED
+                                setState(() {
+                                  isLoading = true;
+                                });
                                 signUpUser();
 
                               }

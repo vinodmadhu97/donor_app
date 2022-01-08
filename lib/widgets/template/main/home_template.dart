@@ -17,7 +17,7 @@ class HomeTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    FirebaseAuth.instance.signOut();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

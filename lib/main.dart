@@ -6,6 +6,7 @@ import 'package:donor_app/screens/startup/onboarding_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'const/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -15,7 +16,11 @@ void main() async{
   /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);*/
   runApp(const MyApp());
+
+
 }
+
+
 
 class MyApp extends StatelessWidget {
   final bool _isLogged = false;
@@ -42,6 +47,7 @@ class MyApp extends StatelessWidget {
           }
             return UpComingScreen();
         }
+
       )
     );
   }
@@ -67,10 +73,8 @@ class SplashLoading extends StatelessWidget {
     return Scaffold(
       backgroundColor: Constants.appColorWhite,
       body: Center(
-        child: CircularProgressIndicator(
-          backgroundColor: Constants.appColorWhite,
-          //color: Constants.appColorBrownRed,
-         valueColor: AlwaysStoppedAnimation<Color>(Constants.appColorBrownRed),
+        child: SpinKitCircle(
+          color: Constants.appColorBrownRed,
         ),
       ),
     );
