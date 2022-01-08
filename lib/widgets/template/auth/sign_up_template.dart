@@ -1,24 +1,81 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:donor_app/const/auth_exception_handler.dart';
+import 'package:donor_app/const/auth_result_status_enum.dart';
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
+import 'package:donor_app/screens/auth/register_screen.dart';
 import 'package:donor_app/screens/auth/sign_in_screen.dart';
-import 'package:donor_app/screens/home_screen.dart';
+import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/widgets/molecules/buttons/filled_rounded_button.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_input_field.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_password_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-class SignUpTemplate extends StatelessWidget {
 
-  GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
-  GlobalKey<FormState> _passwordKey = GlobalKey<FormState>();
-  GlobalKey<FormState> _confirmPasswordKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+class SignUpTemplate extends StatefulWidget {
+
 
   SignUpTemplate({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpTemplate> createState() => _SignUpTemplateState();
+}
+
+class _SignUpTemplateState extends State<SignUpTemplate> {
+  GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
+
+  GlobalKey<FormState> _passwordKey = GlobalKey<FormState>();
+
+  GlobalKey<FormState> _confirmPasswordKey = GlobalKey<FormState>();
+
+  TextEditingController _emailController = TextEditingController();
+
+  TextEditingController _passwordController = TextEditingController();
+
+  TextEditingController _confirmPasswordController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String userId = "";
+  String userEmail = "";
+  String? _status;
+
+  void signUpUser()async{
+
+    //TODO CIRCULAR PROGRESS DIALOG
+    try{
+      await _auth.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim()
+      );
+
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if( currentUser != null){
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const RegisterScreen()));
+        print("register");
+      }
+
+    }catch(e){
+      print('Exception @createAccount: $e');
+      _status = AuthExceptionHandler.generateExceptionMessage(e);
+      Constants().showToast(_status!);
+    }
+
+
+
+
+  }
+
+  /*void saveUserData(){
+    Map<String,dynamic> userData = {
+
+      'uId' : userId,
+      'userEmail' : userEmail,
+    };
+
+    FirebaseFirestore.instance.collection('donors').doc(userId).set(userData);
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +209,7 @@ class SignUpTemplate extends StatelessWidget {
                                 print(_passwordController.text.toString());
 
                                 //MOVING TO THE HOME IF DATA VALIDATED
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (BuildContext context) => HomeScreen()));
+                                signUpUser();
 
                               }
 

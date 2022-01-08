@@ -2,21 +2,53 @@ import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
 import 'package:donor_app/screens/auth/sign_in_screen.dart';
 import 'package:donor_app/screens/auth/sign_up_screen.dart';
-import 'package:donor_app/screens/home_screen.dart';
+import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/widgets/molecules/buttons/filled_rounded_button.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_input_field.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_password_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-class SignInTemplate extends StatelessWidget {
+class SignInTemplate extends StatefulWidget {
+
+  SignInTemplate({Key? key}) : super(key: key);
+
+  @override
+  State<SignInTemplate> createState() => _SignInTemplateState();
+}
+
+class _SignInTemplateState extends State<SignInTemplate> {
   GlobalKey<FormState> _emailKey = GlobalKey<FormState>();
+
   GlobalKey<FormState> _passwordKey = GlobalKey<FormState>();
 
   TextEditingController _emailController = TextEditingController();
+
   TextEditingController _passwordController = TextEditingController();
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  SignInTemplate({Key? key}) : super(key: key);
+  void _login() async{
+
+    //TODO SHOW PROGRESS INDICATOR
+
+    User? currentUser;
+
+    await _auth.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    ).then((auth){
+      if(auth.user != null){
+
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_)=>const HomeScreen()));
+      }
+    }).catchError((error){
+      Navigator.pop(context);
+      //todo show error
+    });
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +141,7 @@ class SignInTemplate extends StatelessWidget {
                                 print(_passwordController.text.toString());
 
                                 //MOVING TO THE HOME IF DATA VALIDATED
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                    builder: (BuildContext context) => HomeScreen()));
-
+                                _login();
                               }
 
                             }

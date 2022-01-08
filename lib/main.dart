@@ -1,26 +1,31 @@
 import 'package:donor_app/screens/auth/register_screen.dart';
 import 'package:donor_app/screens/auth/sign_up_screen.dart';
-import 'package:donor_app/screens/main/home.dart';
+import 'package:donor_app/screens/main/dash_board_screen.dart';
+import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/screens/startup/onboarding_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'const/constants.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);*/
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final bool _isLogged = true;
+  final bool _isLogged = false;
   final bool _isAppInstalled = false;
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -29,7 +34,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Constants.appColorBrownRed,
         primarySwatch: Constants.appColorbrownRedSwatch
       ),
-      home: RegisterScreen()/*FutureBuilder(
+      home: FutureBuilder(
       future: Init.instance.initialize(),
         builder: (context, AsyncSnapshot snapshot){
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -37,7 +42,7 @@ class MyApp extends StatelessWidget {
           }
             return UpComingScreen();
         }
-      )*/
+      )
     );
   }
 }
@@ -84,8 +89,10 @@ class UpComingScreen extends StatelessWidget {
     if(!Constants.isInstalled){
       print(Constants.isInstalled);
       return OnBoardingScreen();
-    }else{
+    }else if(FirebaseAuth.instance.currentUser == null){
       return SignUpScreen();
+    }else{
+      return HomeScreen();
     }
   }
 }
