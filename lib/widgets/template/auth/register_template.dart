@@ -7,6 +7,7 @@ import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/widgets/atoms/app_heading.dart';
 import 'package:donor_app/widgets/molecules/buttons/filled_rounded_button.dart';
 import 'package:donor_app/widgets/molecules/containers/bottom_selecter_view.dart';
+import 'package:donor_app/widgets/molecules/containers/loading_indicator.dart';
 import 'package:donor_app/widgets/molecules/containers/profile_avatar.dart';
 import 'package:donor_app/widgets/molecules/input_fields/app_input_field.dart';
 import 'package:donor_app/widgets/molecules/input_fields/register_input_field.dart';
@@ -46,15 +47,21 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
   TextEditingController _phoneController = TextEditingController();
 
   String _genderSelected = "";
+  String _duration = "";
   bool _termsCheck = false;
   String _profileUrl = "";
   DateTime selectedDate = DateTime.now();
   String userPhotoUrl = "";
+  int currentStep = 0;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isLoading = false;
 
   void uploadData() async {
     //TODO PROGRESS DIALOG
-
+    setState(() {
+      isLoading = true;
+    });
     if (_profileUrl.isNotEmpty) {
       String filename = DateTime.now().microsecondsSinceEpoch.toString();
       firebaseStorage.Reference reference =
@@ -78,6 +85,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
   }
 
   void _register() async {
+
     String currentUser = FirebaseAuth.instance.currentUser!.uid;
     Map<String, dynamic> userData = {
       'profileUrl': userPhotoUrl,
@@ -87,23 +95,32 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
       'phone': _phoneController.text.trim(),
       'dob': _dobController.text.trim(),
       'gender': _genderSelected,
+      'nextDonation': _duration,
       'agreement': _termsCheck.toString()
     };
+   
+      FirebaseFirestore.instance
+          .collection('donors')
+          .doc(currentUser)
+          .set(userData)
+          .then((value){
 
-    FirebaseFirestore.instance
-        .collection('donors')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set(userData)
-        .then((value){
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+      }).catchError((error){
+        print(error.code);
+      });
 
-          Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));});
+    setState(() {
+      isLoading = false;
+    });
+
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading ? LoadingIndicator():Scaffold(
       body: DraggableHome(
           title: Text("Register"),
           curvedBodyRadius: 0,
@@ -153,7 +170,350 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
 
   List<Widget> bodyWidget(BuildContext context) {
     return [
-      SizedBox(height: 30),
+
+      Stepper(
+        currentStep: currentStep,
+        physics: NeverScrollableScrollPhysics(),
+        onStepContinue: (){
+          setState(() {
+            if(currentStep < 7){
+              currentStep = currentStep+1;
+            }else{
+              print("upload data");
+              print(_nameController.text);
+              print(_nationalIdController.text);
+              print(_addressController.text);
+              print(_phoneController.text);
+              print(_dobController.text);
+              print(_genderSelected);
+              print(_duration);
+              print(_termsCheck);
+              //_register();
+              uploadData();
+            }
+          });
+        },
+        onStepCancel: (){
+          setState(() {
+            if(currentStep > 0){
+              currentStep = currentStep - 1;
+            }else{
+              currentStep = 0;
+            }
+          });
+        },
+        onStepTapped: (step){
+          setState(() {
+            this.currentStep = step;
+          });
+        },
+        controlsBuilder: (context,controller){
+          final isLastStep = currentStep == 7;
+          return Container(
+            margin: EdgeInsets.only(top: 30),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: ElevatedButton(
+                      onPressed: controller.onStepContinue,
+                      child: Text(isLastStep ? "REGISTER" : "NEXT"),
+                  ),
+                ),
+                SizedBox(width: 30,),
+                Visibility(
+                  visible : currentStep != 0,
+                  child: ElevatedButton(
+
+                    onPressed: controller.onStepCancel,
+                    child: Text("BACK"),
+                  ),
+                ),
+
+              ],
+            ),
+          );
+        },
+        steps: [
+          Step(
+              title: Text("Step 1"),
+              content: RegisterInputField(
+                  formKey: _nameKey,
+                  controller: _nameController,
+                  inputType: TextInputType.text,
+                  validator:
+                  MultiValidator([RequiredValidator(errorText: '*Required')]),
+                  hintText: "Full name"),
+              isActive: currentStep >= 0
+          ),
+
+          Step(
+              title: Text("Step 2"),
+              content: RegisterInputField(
+                  formKey: _nationalIdKey,
+                  controller: _nationalIdController,
+                  inputType: TextInputType.text,
+                  validator:
+                  MultiValidator([RequiredValidator(errorText: '*Required')]),
+                  hintText: "National Id"),
+              isActive: currentStep >= 1
+          ),
+
+          Step(
+              title: Text("Step 3"),
+              content: RegisterInputField(
+                  formKey: _addressKey,
+                  controller: _addressController,
+                  inputType: TextInputType.text,
+                  validator:
+                  MultiValidator([RequiredValidator(errorText: '*Required')]),
+                  hintText: "Address"),
+              isActive: currentStep >= 2
+          ),
+
+          Step(
+              title: Text("Step 4"),
+              content: RegisterInputField(
+                  formKey: _phoneKey,
+                  controller: _phoneController,
+                  inputType: TextInputType.text,
+                  validator:
+                  MultiValidator([RequiredValidator(errorText: '*Required')]),
+                  hintText: "Phone"),
+              isActive: currentStep >= 3
+          ),
+
+          Step(
+              title: Text("Step 5"),
+              content: Form(
+                key: _dobKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFormField(
+                    controller: _dobController,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: Constants.appColorBlack, fontSize: 14),
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(color: Constants.appColorGray, fontSize: 14),
+                      hintText: "Date of Birth",
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: Constants.appColorBrownRed,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: Constants.appColorGray,
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return "* DOB is Required";
+                      } else
+                        return null;
+                    },
+                    readOnly: true,
+                    onTap: () {
+                      datePicker(context);
+                      print("date picker");
+                    },
+                  ),
+                ),
+              ),
+              isActive: currentStep >= 4
+          ),
+
+          Step(
+              title: Text("Step 6"),
+              content: Column(
+                children: [
+                  Text(
+                    "Gender",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Transform.scale(
+                            scale: 1.5,
+                            child: Radio<String>(
+                                value: "male",
+                                groupValue: _genderSelected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _genderSelected = "male";
+                                  });
+                                }),
+                          ),
+                          Text("Male", style: TextStyle(fontSize: 16))
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Transform.scale(
+                            scale: 1.5,
+                            child: Radio<String>(
+                                value: "female",
+                                groupValue: _genderSelected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _genderSelected = "female";
+                                  });
+                                }),
+                          ),
+                          Text(
+                            "Female",
+                            style: TextStyle(fontSize: 16),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Transform.scale(
+                            scale: 1.5,
+                            child: Radio<String>(
+                                value: "other",
+                                groupValue: _genderSelected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _genderSelected = "other";
+                                  });
+                                }),
+                          ),
+                          Text("Other", style: TextStyle(fontSize: 16))
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              isActive: currentStep >= 5
+          ),
+          Step(
+              title: Text("Step 7"),
+              content: Column(
+                children: [
+                  Text(
+                    "I would like to Donate",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Each 4 Month", style: TextStyle(fontSize: 16)),
+                          Transform.scale(
+                            scale: 1.5,
+                            child: Radio<String>(
+                                value: "4",
+                                groupValue: _duration,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _duration = "4";
+                                  });
+                                }),
+                          ),
+
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Each 6 month",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Transform.scale(
+                            scale: 1.5,
+                            child: Radio<String>(
+                                value: "6",
+                                groupValue: _duration,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _duration = "6";
+                                  });
+                                }),
+                          ),
+
+                        ],
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Each year", style: TextStyle(fontSize: 16)),
+                          Transform.scale(
+                            scale: 1.5,
+                            child: Radio<String>(
+                                value: "12",
+                                groupValue: _duration,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _duration  = "12";
+                                  });
+                                }),
+                          ),
+
+                        ],
+                      ),
+
+                ],
+              ),
+              isActive: currentStep >= 6
+          ),
+
+          Step(
+              title: Text("Step 8"),
+              content: ListTile(
+                leading: Transform.scale(
+                  scale: 1.3,
+                  child: Checkbox(
+                    value: _termsCheck,
+                    onChanged: (value) {
+                      setState(() {
+                        if (!_termsCheck) {
+                          _termsCheck = true;
+
+                          showModalBottomSheet(
+                            context: context,
+                            builder: ((builder) => bottomSheetConfirmTerms()),
+                          );
+                        } else {
+                          _termsCheck = false;
+                        }
+                      });
+                    },
+                  ),
+                ),
+                title: Text("I agree to Terms & Conditions"),
+              ),
+              isActive: currentStep >= 7
+          ),
+
+
+
+
+
+        ],
+      )
+      /*SizedBox(height: 30),
       RegisterInputField(
           formKey: _nameKey,
           controller: _nameController,
@@ -347,7 +707,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
             print(_termsCheck);
             //_register();
             uploadData();
-          })
+          })*/
     ];
   }
 
