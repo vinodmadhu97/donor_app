@@ -1,4 +1,7 @@
+import 'package:donor_app/screens/main/campaigns_screen.dart';
+import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/screens/main/profile_screen.dart';
+import 'package:donor_app/screens/main/requests_screen.dart';
 import 'package:donor_app/screens/main/setting_screen.dart';
 import 'package:donor_app/widgets/template/main/dash_board_template.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +13,24 @@ class DashBoardScreen extends StatelessWidget {
     return DashBoardTemplate(
         navigationData: [
           {
-            'navIcon' : Icons.person,
+            'navIcon' : Icons.home,
             'navTitle': 'Home',
-            'navScreen' : ProfileScreen()
+            'navScreen' : HomeScreen()
           },
           {
-            'navIcon' : Icons.admin_panel_settings_rounded,
-            'navTitle': 'Favorite',
-            'navScreen' : SettingScreen()
+            'navIcon' : Icons.call_received_sharp,
+            'navTitle': 'Requests',
+            'navScreen' : RequestScreen()
+          },
+          {
+            'navIcon' : Icons.airline_seat_flat_angled_sharp,
+            'navTitle': 'Campaigns',
+            'navScreen' : CampaignsScreen()
+          },
+          {
+            'navIcon' : Icons.person,
+            'navTitle': 'Profile',
+            'navScreen' : ProfileScreen()
           },
         ]
     );

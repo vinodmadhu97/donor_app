@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:donor_app/const/constants.dart';
+import 'package:donor_app/screens/main/donate_screen.dart';
 import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,11 +50,11 @@ class _DashBoardTemplateState extends State<DashBoardTemplate> with SingleTicker
           elevation: 8,
           backgroundColor: Constants.appColorBrownRed,
           child: Icon(
-            Icons.home,
+            Icons.favorite,
             color: Constants.appColorWhite,
           ),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>HomeScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>DonateScreen()));
           },
         ),
       ),

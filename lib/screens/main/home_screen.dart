@@ -11,40 +11,43 @@ class HomeScreen extends StatelessWidget {
 
         {
           "title": "Donate",
-          "color": Constants.appColorGray,
+          "color": Constants.appColorWhite,
           "imgUrl": "assets/icons/home-menu-1.png",
           "clickEvent": (){print("donate");}
         },
+        /*{
+          "title": "Campaigns",
+          "color": Constants.appColorWhite,
+          "imgUrl": "assets/icons/home-menu-4.png",
+          "clickEvent": (){print("Campaigns");}
+        },*/
         {
+          "title": "BMI",
+          "color": Constants.appColorWhite,
+          "imgUrl": "assets/icons/home-menu-6.png",
+          "clickEvent": (){print("BMI");}
+        },
+        {
+          "title": "Locations",
+          "color": Constants.appColorWhite,
+          "imgUrl": "assets/icons/home-menu-5.png",
+          "clickEvent": (){print("locations");}
+        },
+        /*{
           "title": "Records",
-          "color": Constants.appColorGray,
+          "color": Constants.appColorWhite,
           "imgUrl": "assets/icons/home-menu-2.png",
           "clickEvent": (){print("records");}
         },
         {
           "title": "Requests",
-          "color": Constants.appColorGray,
+          "color": Constants.appColorWhite,
           "imgUrl": "assets/icons/home-menu-3.png",
           "clickEvent": (){print("Requests");}
-        },
-        {
-          "title": "Campaigns",
-          "color": Constants.appColorGray,
-          "imgUrl": "assets/icons/home-menu-4.png",
-          "clickEvent": (){print("Campaigns");}
-        },
-        {
-          "title": "Locations",
-          "color": Constants.appColorGray,
-          "imgUrl": "assets/icons/home-menu-5.png",
-          "clickEvent": (){print("locations");}
-        },
-        {
-          "title": "BMI",
-          "color": Constants.appColorGray,
-          "imgUrl": "assets/icons/home-menu-6.png",
-          "clickEvent": (){print("BMI");}
-        },
+        },*/
+
+
+
 
       ],
     );

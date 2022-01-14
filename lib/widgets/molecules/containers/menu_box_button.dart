@@ -30,6 +30,13 @@ class MenuBoxButton extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: color,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  offset: Offset(0.0, 0.5), //(x,y)
+                  blurRadius: 6.0,
+                ),
+              ],
             ),
             child: Center(
               child: Image.asset(imgUrl),

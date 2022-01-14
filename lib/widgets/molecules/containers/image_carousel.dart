@@ -29,10 +29,10 @@ class _ImageCarouselState extends State<ImageCarousel> {
             },
             options: CarouselOptions(
 
-                height: 200,
+                height: 180,
                 autoPlay: true,
-                autoPlayInterval: Duration(seconds: 5),
-                viewportFraction: 1,
+                autoPlayInterval: Duration(seconds: 8),
+                //viewportFraction: 1,
                 onPageChanged: (index, reason) {
                   setState(() {
                     activeIndex = index;
@@ -59,8 +59,8 @@ class _ImageCarouselState extends State<ImageCarousel> {
   Widget buildImage(String url, int index){
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      height: 300,
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      height: 250,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         //color: Colors.grey

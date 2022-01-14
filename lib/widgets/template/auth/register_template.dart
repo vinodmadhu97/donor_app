@@ -3,6 +3,7 @@ import 'dart:io' as Io;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
+import 'package:donor_app/screens/main/dash_board_screen.dart';
 import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/widgets/atoms/app_heading.dart';
 import 'package:donor_app/widgets/molecules/buttons/filled_rounded_button.dart';
@@ -106,7 +107,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
           .then((value){
 
         Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
+            .pushReplacement(MaterialPageRoute(builder: (_) => DashBoardScreen()));
       }).catchError((error){
         print(error.code);
       });

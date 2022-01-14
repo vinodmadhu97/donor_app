@@ -96,7 +96,7 @@ class UpComingScreen extends StatelessWidget {
     }else if(FirebaseAuth.instance.currentUser == null){
       return SignUpScreen();
     }else{
-      return HomeScreen();
+      return DashBoardScreen();
     }
   }
 }
