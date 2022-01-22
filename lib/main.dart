@@ -3,6 +3,7 @@ import 'package:donor_app/screens/auth/sign_up_screen.dart';
 import 'package:donor_app/screens/main/dash_board_screen.dart';
 import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:donor_app/screens/startup/onboarding_screen.dart';
+import 'package:donor_app/widgets/template/main/donation_qr_template.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

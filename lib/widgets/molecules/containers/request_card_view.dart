@@ -1,109 +1,91 @@
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
+import 'package:donor_app/widgets/atoms/app_heading.dart';
 import 'package:donor_app/widgets/atoms/app_label.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RequestCardView extends StatelessWidget {
-  /*final String imgUrl;
-  final String title;
-  final String location;
-  final String price;
-  final String time;*/
-
-  RequestCardView(
-      {Key? key,
-      /*required this.title,
-      required this.imgUrl,
-      required this.price,
-      required this.location,
-      required this.time*/})
-      : super(key: key);
+  const RequestCardView({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        elevation: 0,
-        //shadowColor: Colors.red,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        child: Container(
-          color: Color(0xffFFB4B4).withOpacity(0.5),
-          padding: EdgeInsets.all(16),
-          width: double.infinity,
-          height: 180,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                  flex: 4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 20.0, left: 20),
+          child: Container(
+            height: 150,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Constants.appColorWhite,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  offset: Offset(0.0, 0.5), //(x,y)
+                  blurRadius: 6.0,
+                ),
+              ],
+            ),
+
+            child: Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppHeading(text: "Ragama Hospital",widgetSize: WidgetSize.small,),
+                  AppLabel(text: "Main road Ragama",
+                    widgetSize: WidgetSize.medium,
+                    textColor: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+
+                  AppLabel(
+                    text: "Emergency",
+                    widgetSize: WidgetSize.medium,
+                    textColor: Constants.appColorBrownRed,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  AppLabel(
+                    text: "Today before 2.00 pm",
+                    widgetSize: WidgetSize.medium,
+                    textColor: Constants.appColorBrownRed,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  Row(
                     children: [
-                      AppLabel(
-                        text: "Location",
-                        widgetSize: WidgetSize.medium,
-                        textColor: Constants.appColorGray,
-
-                      ),
-                      AppLabel(
-                        text: "Kalubowila Hospital",
-                        widgetSize: WidgetSize.large,
-                        textColor: Constants.appColorBlack,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      AppLabel(
-                        text: "Date",
-                        widgetSize: WidgetSize.medium,
-                        textColor: Constants.appColorGray,
-                      ),
-                      AppLabel(
-                        text: "2022/01/06",
-                        widgetSize: WidgetSize.large,
-                        textColor: Constants.appColorBlack,
-
-                      ),
-                      Spacer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                              onPressed: (){}, child: Text("Accept"))
-                        ],
-                      )
+                      ElevatedButton(
+                          onPressed: (){print("accepted");},
+                          child: Text("Accept")),
+                      SizedBox(width: 5,),
+                      ElevatedButton(
+                          onPressed: (){print("accepted");},
+                          child: Text("Share"))
                     ],
-                  )),
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: [
-                    Container(
-                      child: Center(child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: Text("A+",style: TextStyle(fontSize: 16),),
-                      ),),
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage("assets/icons/blood_bubble.png",),
+                  )
 
-                          )
-                      ),
-                      height: 70,
-                      width: 70,
-                    ),
-                    Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: (){}, child: Text("Share"))
-                      ],
-                    )
-                  ],
-                )
-              )
-            ],
+                ],
+              ),
+            ),
           ),
-        ));
+        ),
+        Container(
+          alignment: Alignment.center,
+          height: 100,
+          width: 100,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Constants.appColorBrownRed,
+          ),
+          child: AppHeading(
+            text: "A+",
+            widgetSize: WidgetSize.large,
+            color: Constants.appColorWhite,
+          ),
+        ),
+      ],
+    );
   }
 }

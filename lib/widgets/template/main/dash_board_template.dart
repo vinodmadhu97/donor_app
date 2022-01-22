@@ -3,6 +3,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/screens/main/donate_screen.dart';
+import 'package:donor_app/screens/main/donation_qr_screen.dart';
 import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,7 +55,7 @@ class _DashBoardTemplateState extends State<DashBoardTemplate> with SingleTicker
             color: Constants.appColorWhite,
           ),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>DonateScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>DonationQRScreen()));
           },
         ),
       ),
