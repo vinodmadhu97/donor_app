@@ -1,4 +1,5 @@
 import 'package:donor_app/const/constants.dart';
+import 'package:donor_app/screens/main/donation_qr_screen.dart';
 import 'package:donor_app/widgets/template/main/home_template.dart';
 import 'package:flutter/material.dart';
 class HomeScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
           "title": "Donate",
           "color": Constants.appColorWhite,
           "imgUrl": "assets/icons/home-menu-1.png",
-          "clickEvent": (){print("donate");}
+          "clickEvent": (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>DonationQRScreen()));}
         },
         /*{
           "title": "Campaigns",

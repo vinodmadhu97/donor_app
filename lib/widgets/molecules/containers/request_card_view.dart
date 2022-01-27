@@ -43,7 +43,7 @@ class RequestCardView extends StatelessWidget {
                   ),
 
                   AppLabel(
-                    text: "Emergency",
+                    text: "High",
                     widgetSize: WidgetSize.medium,
                     textColor: Constants.appColorBrownRed,
                     fontWeight: FontWeight.w600,

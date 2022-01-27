@@ -2,6 +2,7 @@ import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
 import 'package:donor_app/widgets/atoms/app_heading.dart';
 import 'package:donor_app/widgets/atoms/app_label.dart';
+import 'package:donor_app/widgets/molecules/containers/app_drawer.dart';
 import 'package:donor_app/widgets/molecules/containers/campaign_card_view.dart';
 import 'package:donor_app/widgets/molecules/containers/image_carousel.dart';
 import 'package:donor_app/widgets/molecules/containers/menu_box_button.dart';
@@ -18,19 +19,11 @@ class HomeTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      /*extendBodyBehindAppBar: true,*/
+      drawer: AppDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-            onPressed: () {
-              print("notification");
-            },
-            icon: Icon(
-              Icons.view_headline,
-              color: Constants.appColorBrownRed,
-            )),
-        actions: [],
+        title: Text("Home"),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(

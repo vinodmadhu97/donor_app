@@ -42,6 +42,7 @@ class Constants{
 
   //set app installed data
   Future<void> setAppInstalledDataInSF(String key, bool value) async {
+
     final SharedPreferences prefs = await _mSF;
 
     prefs.setBool(key, value);
@@ -49,6 +50,7 @@ class Constants{
   }
 
   Future<void> getAppInstalledDataInSF(String key) async {
+
     final SharedPreferences prefs = await _mSF;
 
     if(prefs.containsKey(key)){
@@ -62,8 +64,8 @@ class Constants{
 
   }
 
-  /*//<-----------------------CHECK INTERNET CONNECTION------------------>
-  static Future<bool> checkInternet() async{
+  //<-----------------------CHECK INTERNET CONNECTION------------------>
+  /*static Future<bool> checkInternet() async{
     bool hasConnect =  await InternetConnectionChecker().hasConnection;
 
 
