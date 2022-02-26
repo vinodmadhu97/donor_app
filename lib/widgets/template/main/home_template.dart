@@ -1,13 +1,11 @@
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
 import 'package:donor_app/widgets/atoms/app_heading.dart';
-import 'package:donor_app/widgets/atoms/app_label.dart';
 import 'package:donor_app/widgets/molecules/containers/app_drawer.dart';
 import 'package:donor_app/widgets/molecules/containers/campaign_card_view.dart';
 import 'package:donor_app/widgets/molecules/containers/image_carousel.dart';
 import 'package:donor_app/widgets/molecules/containers/menu_box_button.dart';
 import 'package:donor_app/widgets/molecules/containers/request_card_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +16,7 @@ class HomeTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //FirebaseAuth.instance.signOut();
     return Scaffold(
       /*extendBodyBehindAppBar: true,*/
       drawer: AppDrawer(),
@@ -95,12 +94,12 @@ class HomeTemplate extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: RequestCardView(),
             ),
-            SizedBox(height: 50,)
+            SizedBox(
+              height: 50,
+            )
           ],
         ),
       ),
     );
   }
 }
-
-

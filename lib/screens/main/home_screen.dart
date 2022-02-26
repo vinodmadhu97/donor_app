@@ -1,5 +1,7 @@
 import 'package:donor_app/const/constants.dart';
+import 'package:donor_app/screens/main/BMI_calculation_screen.dart';
 import 'package:donor_app/screens/main/donation_qr_screen.dart';
+import 'package:donor_app/screens/main/google_map_screen.dart';
 import 'package:donor_app/widgets/template/main/home_template.dart';
 import 'package:flutter/material.dart';
 class HomeScreen extends StatelessWidget {
@@ -26,13 +28,13 @@ class HomeScreen extends StatelessWidget {
           "title": "BMI",
           "color": Constants.appColorWhite,
           "imgUrl": "assets/icons/home-menu-6.png",
-          "clickEvent": (){print("BMI");}
+          "clickEvent": (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>BMICalculationScreen()));}
         },
         {
           "title": "Locations",
           "color": Constants.appColorWhite,
           "imgUrl": "assets/icons/home-menu-5.png",
-          "clickEvent": (){print("locations");}
+          "clickEvent": (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>GoogleMapScreen()));}
         },
         /*{
           "title": "Records",

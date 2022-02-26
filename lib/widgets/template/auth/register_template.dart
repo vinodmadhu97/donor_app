@@ -1,23 +1,18 @@
 import 'dart:io' as Io;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donor_app/const/constants.dart';
-import 'package:donor_app/const/widget_size.dart';
-import 'package:donor_app/screens/main/dash_board_screen.dart';
-import 'package:donor_app/screens/main/home_screen.dart';
+import 'package:donor_app/services/firebase_services.dart';
 import 'package:donor_app/widgets/atoms/app_heading.dart';
-import 'package:donor_app/widgets/molecules/buttons/filled_rounded_button.dart';
 import 'package:donor_app/widgets/molecules/containers/bottom_selecter_view.dart';
 import 'package:donor_app/widgets/molecules/containers/loading_indicator.dart';
 import 'package:donor_app/widgets/molecules/containers/profile_avatar.dart';
-import 'package:donor_app/widgets/molecules/input_fields/app_input_field.dart';
 import 'package:donor_app/widgets/molecules/input_fields/register_input_field.dart';
 import 'package:draggable_home/draggable_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebaseStorage;
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebaseStorage;
 
 class RegisterTemplate extends StatefulWidget {
   RegisterTemplate({Key? key}) : super(key: key);
@@ -63,73 +58,63 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
     setState(() {
       isLoading = true;
     });
-    if (_profileUrl.isNotEmpty) {
-      String filename = DateTime.now().microsecondsSinceEpoch.toString();
-      firebaseStorage.Reference reference =
-          firebaseStorage.FirebaseStorage.instance.ref().child(filename);
-      firebaseStorage.UploadTask uploadTask =
-          reference.putFile(Io.File(_profileUrl));
+    try {
+      if (_profileUrl.isNotEmpty) {
+        String filename = DateTime.now().microsecondsSinceEpoch.toString();
+        firebaseStorage.Reference reference =
+            firebaseStorage.FirebaseStorage.instance.ref().child(filename);
+        firebaseStorage.UploadTask uploadTask =
+            reference.putFile(Io.File(_profileUrl));
 
-      firebaseStorage.TaskSnapshot taskSnapshot =
-          await uploadTask.whenComplete(() => () {});
+        firebaseStorage.TaskSnapshot taskSnapshot =
+            await uploadTask.whenComplete(() => () {});
 
-      await taskSnapshot.ref.getDownloadURL().then((url) {
-        userPhotoUrl = url;
-        print(userPhotoUrl);
+        await taskSnapshot.ref.getDownloadURL().then((url) {
+          userPhotoUrl = url;
+          print(userPhotoUrl);
+          _register();
+        });
+      } else {
         _register();
-      });
-    } else {
-      _register();
+      }
+    } catch (e) {
+      Constants().showToast(e.toString());
     }
 
     print(_profileUrl);
   }
 
   void _register() async {
-
-    String currentUser = FirebaseAuth.instance.currentUser!.uid;
-    Map<String, dynamic> userData = {
-      'profileUrl': userPhotoUrl,
-      'fullName': _nameController.text.trim(),
-      'nic': _nationalIdController.text.trim(),
-      'address': _addressController.text.trim(),
-      'phone': _phoneController.text.trim(),
-      'dob': _dobController.text.trim(),
-      'gender': _genderSelected,
-      'nextDonation': _duration,
-      'agreement': _termsCheck.toString()
-    };
-   
-      FirebaseFirestore.instance
-          .collection('donors')
-          .doc(currentUser)
-          .set(userData)
-          .then((value){
-
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (_) => DashBoardScreen()));
-      }).catchError((error){
-        print(error.code);
-      });
-
+    FirebaseServices().registerNewDonor(
+        context,
+        _auth.currentUser!.uid,
+        userPhotoUrl,
+        _nameController.text.trim(),
+        _nationalIdController.text.trim(),
+        _addressController.text.trim(),
+        _phoneController.text.trim(),
+        _dobController.text.trim(),
+        _genderSelected,
+        _duration,
+        _termsCheck.toString());
     setState(() {
       isLoading = false;
     });
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ? LoadingIndicator():Scaffold(
-      body: DraggableHome(
-          title: Text("Register"),
-          curvedBodyRadius: 0,
-          headerExpandedHeight: 0.35,
-          fullyStretchable: false,
-          headerWidget: headerWidget(),
-          body: bodyWidget(context)),
-    );
+    return isLoading
+        ? LoadingIndicator()
+        : Scaffold(
+            body: DraggableHome(
+                title: Text("Register"),
+                curvedBodyRadius: 0,
+                headerExpandedHeight: 0.35,
+                fullyStretchable: false,
+                headerWidget: headerWidget(),
+                body: bodyWidget(context)),
+          );
   }
 
   Widget headerWidget() {
@@ -171,15 +156,14 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
 
   List<Widget> bodyWidget(BuildContext context) {
     return [
-
       Stepper(
         currentStep: currentStep,
         physics: NeverScrollableScrollPhysics(),
-        onStepContinue: (){
+        onStepContinue: () {
           setState(() {
-            if(currentStep < 7){
-              currentStep = currentStep+1;
-            }else{
+            if (currentStep < 7) {
+              currentStep = currentStep + 1;
+            } else {
               print("upload data");
               print(_nameController.text);
               print(_nationalIdController.text);
@@ -194,21 +178,21 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
             }
           });
         },
-        onStepCancel: (){
+        onStepCancel: () {
           setState(() {
-            if(currentStep > 0){
+            if (currentStep > 0) {
               currentStep = currentStep - 1;
-            }else{
+            } else {
               currentStep = 0;
             }
           });
         },
-        onStepTapped: (step){
+        onStepTapped: (step) {
           setState(() {
             this.currentStep = step;
           });
         },
-        controlsBuilder: (context,controller){
+        controlsBuilder: (context, controller) {
           final isLastStep = currentStep == 7;
           return Container(
             margin: EdgeInsets.only(top: 30),
@@ -217,20 +201,20 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20.0),
                   child: ElevatedButton(
-                      onPressed: controller.onStepContinue,
-                      child: Text(isLastStep ? "REGISTER" : "NEXT"),
+                    onPressed: controller.onStepContinue,
+                    child: Text(isLastStep ? "REGISTER" : "NEXT"),
                   ),
                 ),
-                SizedBox(width: 30,),
+                SizedBox(
+                  width: 30,
+                ),
                 Visibility(
-                  visible : currentStep != 0,
+                  visible: currentStep != 0,
                   child: ElevatedButton(
-
                     onPressed: controller.onStepCancel,
                     child: Text("BACK"),
                   ),
                 ),
-
               ],
             ),
           );
@@ -242,48 +226,40 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   formKey: _nameKey,
                   controller: _nameController,
                   inputType: TextInputType.text,
-                  validator:
-                  MultiValidator([RequiredValidator(errorText: '*Required')]),
+                  validator: MultiValidator(
+                      [RequiredValidator(errorText: '*Required')]),
                   hintText: "Full name"),
-              isActive: currentStep >= 0
-          ),
-
+              isActive: currentStep >= 0),
           Step(
               title: Text("Step 2"),
               content: RegisterInputField(
                   formKey: _nationalIdKey,
                   controller: _nationalIdController,
                   inputType: TextInputType.text,
-                  validator:
-                  MultiValidator([RequiredValidator(errorText: '*Required')]),
+                  validator: MultiValidator(
+                      [RequiredValidator(errorText: '*Required')]),
                   hintText: "National Id"),
-              isActive: currentStep >= 1
-          ),
-
+              isActive: currentStep >= 1),
           Step(
               title: Text("Step 3"),
               content: RegisterInputField(
                   formKey: _addressKey,
                   controller: _addressController,
                   inputType: TextInputType.text,
-                  validator:
-                  MultiValidator([RequiredValidator(errorText: '*Required')]),
+                  validator: MultiValidator(
+                      [RequiredValidator(errorText: '*Required')]),
                   hintText: "Address"),
-              isActive: currentStep >= 2
-          ),
-
+              isActive: currentStep >= 2),
           Step(
               title: Text("Step 4"),
               content: RegisterInputField(
                   formKey: _phoneKey,
                   controller: _phoneController,
                   inputType: TextInputType.text,
-                  validator:
-                  MultiValidator([RequiredValidator(errorText: '*Required')]),
+                  validator: MultiValidator(
+                      [RequiredValidator(errorText: '*Required')]),
                   hintText: "Phone"),
-              isActive: currentStep >= 3
-          ),
-
+              isActive: currentStep >= 3),
           Step(
               title: Text("Step 5"),
               content: Form(
@@ -294,10 +270,12 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   child: TextFormField(
                     controller: _dobController,
                     textAlign: TextAlign.left,
-                    style: TextStyle(color: Constants.appColorBlack, fontSize: 14),
+                    style:
+                        TextStyle(color: Constants.appColorBlack, fontSize: 14),
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Constants.appColorGray, fontSize: 14),
+                      hintStyle: TextStyle(
+                          color: Constants.appColorGray, fontSize: 14),
                       hintText: "Date of Birth",
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -327,9 +305,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   ),
                 ),
               ),
-              isActive: currentStep >= 4
-          ),
-
+              isActive: currentStep >= 4),
           Step(
               title: Text("Step 6"),
               content: Column(
@@ -402,8 +378,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   ),
                 ],
               ),
-              isActive: currentStep >= 5
-          ),
+              isActive: currentStep >= 5),
           Step(
               title: Text("Step 7"),
               content: Column(
@@ -415,71 +390,63 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   SizedBox(
                     height: 10,
                   ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Each 4 Month", style: TextStyle(fontSize: 16)),
-                          Transform.scale(
-                            scale: 1.5,
-                            child: Radio<String>(
-                                value: "4",
-                                groupValue: _duration,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _duration = "4";
-                                  });
-                                }),
-                          ),
-
-                        ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Each 4 Month", style: TextStyle(fontSize: 16)),
+                      Transform.scale(
+                        scale: 1.5,
+                        child: Radio<String>(
+                            value: "4",
+                            groupValue: _duration,
+                            onChanged: (value) {
+                              setState(() {
+                                _duration = "4";
+                              });
+                            }),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Each 6 month",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Transform.scale(
-                            scale: 1.5,
-                            child: Radio<String>(
-                                value: "6",
-                                groupValue: _duration,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _duration = "6";
-                                  });
-                                }),
-                          ),
-
-                        ],
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Each 6 month",
+                        style: TextStyle(fontSize: 16),
                       ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Each year", style: TextStyle(fontSize: 16)),
-                          Transform.scale(
-                            scale: 1.5,
-                            child: Radio<String>(
-                                value: "12",
-                                groupValue: _duration,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _duration  = "12";
-                                  });
-                                }),
-                          ),
-
-                        ],
+                      Transform.scale(
+                        scale: 1.5,
+                        child: Radio<String>(
+                            value: "6",
+                            groupValue: _duration,
+                            onChanged: (value) {
+                              setState(() {
+                                _duration = "6";
+                              });
+                            }),
                       ),
-
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Each year", style: TextStyle(fontSize: 16)),
+                      Transform.scale(
+                        scale: 1.5,
+                        child: Radio<String>(
+                            value: "12",
+                            groupValue: _duration,
+                            onChanged: (value) {
+                              setState(() {
+                                _duration = "12";
+                              });
+                            }),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-              isActive: currentStep >= 6
-          ),
-
+              isActive: currentStep >= 6),
           Step(
               title: Text("Step 8"),
               content: ListTile(
@@ -505,210 +472,9 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                 ),
                 title: Text("I agree to Terms & Conditions"),
               ),
-              isActive: currentStep >= 7
-          ),
-
-
-
-
-
+              isActive: currentStep >= 7),
         ],
       )
-      /*SizedBox(height: 30),
-      RegisterInputField(
-          formKey: _nameKey,
-          controller: _nameController,
-          inputType: TextInputType.text,
-          validator:
-              MultiValidator([RequiredValidator(errorText: '*Required')]),
-          hintText: "Full name"),
-      SizedBox(
-        height: 30,
-      ),
-      RegisterInputField(
-          formKey: _nationalIdKey,
-          controller: _nationalIdController,
-          inputType: TextInputType.text,
-          validator:
-              MultiValidator([RequiredValidator(errorText: '*Required')]),
-          hintText: "National Id"),
-      SizedBox(
-        height: 30,
-      ),
-      RegisterInputField(
-          formKey: _addressKey,
-          controller: _addressController,
-          inputType: TextInputType.text,
-          validator:
-              MultiValidator([RequiredValidator(errorText: '*Required')]),
-          hintText: "Address"),
-      SizedBox(
-        height: 30,
-      ),
-      RegisterInputField(
-          formKey: _phoneKey,
-          controller: _phoneController,
-          inputType: TextInputType.text,
-          validator:
-              MultiValidator([RequiredValidator(errorText: '*Required')]),
-          hintText: "Phone"),
-      SizedBox(
-        height: 30,
-      ),
-      Form(
-        key: _dobKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: TextFormField(
-            controller: _dobController,
-            textAlign: TextAlign.left,
-            style: TextStyle(color: Constants.appColorBlack, fontSize: 14),
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              hintStyle: TextStyle(color: Constants.appColorGray, fontSize: 14),
-              hintText: "Date of Birth",
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color: Constants.appColorBrownRed,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color: Constants.appColorGray,
-                  width: 1.0,
-                ),
-              ),
-            ),
-            validator: (value) {
-              if (value!.trim().isEmpty) {
-                return "* DOB is Required";
-              } else
-                return null;
-            },
-            readOnly: true,
-            onTap: () {
-              datePicker(context);
-              print("date picker");
-            },
-          ),
-        ),
-      ),
-      SizedBox(
-        height: 30,
-      ),
-      Text(
-        "Gender",
-        style: TextStyle(fontSize: 20),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Transform.scale(
-                scale: 1.5,
-                child: Radio<String>(
-                    value: "male",
-                    groupValue: _genderSelected,
-                    onChanged: (value) {
-                      setState(() {
-                        _genderSelected = "male";
-                      });
-                    }),
-              ),
-              Text("Male", style: TextStyle(fontSize: 16))
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Transform.scale(
-                scale: 1.5,
-                child: Radio<String>(
-                    value: "female",
-                    groupValue: _genderSelected,
-                    onChanged: (value) {
-                      setState(() {
-                        _genderSelected = "female";
-                      });
-                    }),
-              ),
-              Text(
-                "Female",
-                style: TextStyle(fontSize: 16),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Transform.scale(
-                scale: 1.5,
-                child: Radio<String>(
-                    value: "other",
-                    groupValue: _genderSelected,
-                    onChanged: (value) {
-                      setState(() {
-                        _genderSelected = "other";
-                      });
-                    }),
-              ),
-              Text("Other", style: TextStyle(fontSize: 16))
-            ],
-          ),
-        ],
-      ),
-      SizedBox(
-        height: 20,
-      ),
-      ListTile(
-        leading: Transform.scale(
-          scale: 1.3,
-          child: Checkbox(
-            value: _termsCheck,
-            onChanged: (value) {
-              setState(() {
-                if (!_termsCheck) {
-                  _termsCheck = true;
-
-                  showModalBottomSheet(
-                    context: context,
-                    builder: ((builder) => bottomSheetConfirmTerms()),
-                  );
-                } else {
-                  _termsCheck = false;
-                }
-              });
-            },
-          ),
-        ),
-        title: Text("I agree to Terms & Conditions"),
-      ),
-      SizedBox(
-        height: 30,
-      ),
-      FilledRoundedButton(
-          text: "Register",
-          widgetSize: WidgetSize.large,
-          clickEvent: () {
-            print("upload data");
-            print(_nameController.text);
-            print(_nationalIdController.text);
-            print(_addressController.text);
-            print(_phoneController.text);
-            print(_dobController.text);
-            print(_genderSelected);
-            print(_termsCheck);
-            //_register();
-            uploadData();
-          })*/
     ];
   }
 

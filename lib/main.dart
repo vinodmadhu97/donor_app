@@ -1,12 +1,11 @@
-import 'package:donor_app/screens/auth/register_screen.dart';
 import 'package:donor_app/screens/auth/sign_up_screen.dart';
+import 'package:donor_app/screens/main/BMI_calculation_screen.dart';
 import 'package:donor_app/screens/main/dash_board_screen.dart';
-import 'package:donor_app/screens/main/home_screen.dart';
+import 'package:donor_app/screens/main/donation_question_records_screen.dart';
+import 'package:donor_app/screens/main/google_map_screen.dart';
 import 'package:donor_app/screens/startup/onboarding_screen.dart';
-import 'package:donor_app/widgets/template/main/donation_qr_template.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'const/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,8 +19,6 @@ void main() async{
 
 
 }
-
-
 
 class MyApp extends StatelessWidget {
   final bool _isLogged = false;
