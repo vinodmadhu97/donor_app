@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:donor_app/const/connection_enum.dart';
+import 'package:donor_app/const/custom_dialog_box.dart';
+import 'package:donor_app/controllers/network_controller.dart';
 import 'package:donor_app/screens/main/dash_board_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../const/auth_exception_handler.dart';
 import '../const/auth_result_status_enum.dart';
 import '../const/constants.dart';
+import '../const/custom_snack_bar.dart';
 import '../screens/auth/register_screen.dart';
 import '../screens/main/donation_question_records_screen.dart';
-import '../screens/main/home_screen.dart';
 
 class FirebaseServices {
   AuthResultStatus? _status;
@@ -18,55 +22,78 @@ class FirebaseServices {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  NetworkController networkController = Get.find<NetworkController>();
+
   Future signupDonor(
       BuildContext context, String email, String password) async {
-    try {
-      await auth
-          .createUserWithEmailAndPassword(
-              email: email.trim(), password: password.trim())
-          .then((value) async {
-        HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
-            "addUserRole",
-            options: HttpsCallableOptions(timeout: const Duration(seconds: 5)));
-        var result = await callable({"email": value.user?.email});
-        print("------------custom claim ${result.data.toString()}");
-      });
+    if (networkController.connectionStatus.value != ConnectionEnum.noInternet) {
+      try {
+        CustomDialogBox.buildDialogBox();
 
-      User? currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (ctx) => const RegisterScreen()));
-        print("register");
+        await auth
+            .createUserWithEmailAndPassword(
+                email: email.trim(), password: password.trim())
+            .then((value) async {
+          HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+              "addUserRole",
+              options:
+                  HttpsCallableOptions(timeout: const Duration(seconds: 5)));
+          var result = await callable({"email": value.user?.email});
+          print("------------custom claim ${result.data.toString()}");
+        });
+
+        User? currentUser = FirebaseAuth.instance.currentUser;
+        if (currentUser != null) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (ctx) => const RegisterScreen()));
+          print("register");
+        }
+      } catch (error) {
+        _status = AuthExceptionHandler.handleException(error);
+        errorMsg = AuthExceptionHandler.generateExceptionMessage(_status);
+        Constants().showToast(errorMsg!);
+        CustomSnackBar.buildSnackBar(title: "Alert", message: errorMsg!);
       }
-    } catch (error) {
-      _status = AuthExceptionHandler.handleException(error);
-      errorMsg = AuthExceptionHandler.generateExceptionMessage(_status);
-      Constants().showToast(errorMsg!);
+    } else {
+      CustomSnackBar.buildSnackBar(
+          title: "Connection Problem", message: "No internet Connection");
     }
   }
 
   Future donorLogin(String email, String password, BuildContext context) async {
-    try {
-      await auth
-          .signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      )
-          .then((auth) {
-        auth.user?.getIdTokenResult().then((idTokenResult) {
-          print(idTokenResult.claims?['donor']);
-          if (idTokenResult.claims?['donor']) {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => const HomeScreen()));
-          } else {
-            Constants().showToast("Invalid User name or password");
-          }
+    if (networkController.connectionStatus.value != ConnectionEnum.noInternet) {
+      try {
+        CustomDialogBox.buildDialogBox();
+        await auth
+            .signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        )
+            .then((auth) {
+          auth.user?.getIdTokenResult().then((idTokenResult) {
+            print(idTokenResult.claims?['donor']);
+            if (idTokenResult.claims?['donor']) {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const DashBoardScreen()));
+            } else {
+              Navigator.of(context).pop();
+              CustomSnackBar.buildSnackBar(
+                  title: "Alert", message: "Invalid User name or password");
+            }
+          });
         });
-      });
-    } catch (error) {
-      _status = AuthExceptionHandler.handleException(error);
-      errorMsg = AuthExceptionHandler.generateExceptionMessage(_status);
-      Constants().showToast(errorMsg!);
+      } catch (error) {
+        Navigator.of(context).pop();
+        _status = AuthExceptionHandler.handleException(error);
+        errorMsg = AuthExceptionHandler.generateExceptionMessage(_status);
+
+        CustomSnackBar.buildSnackBar(
+            title: "Connection Problem", message: errorMsg!);
+      }
+    } else {
+      CustomSnackBar.buildSnackBar(
+          title: "Connection Problem", message: "No internet Connection");
     }
   }
 
@@ -92,18 +119,26 @@ class FirebaseServices {
       'dob': dob,
       'gender': gender,
       'nextDonation': duration,
-      'agreement': termsAgree
+      'agreement': termsAgree,
+      'numberOfDonation': "0",
+      'nextDonationDate': "",
+      'bloodGroup': "",
     };
 
-    try {
-      firestore
-          .collection("donors")
-          .doc(auth.currentUser?.uid)
-          .set(userData)
-          .then((value) => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => DashBoardScreen())));
-    } catch (e) {
-      Constants().showToast(e.toString());
+    if (networkController.connectionStatus.value != ConnectionEnum.noInternet) {
+      try {
+        firestore
+            .collection("donors")
+            .doc(auth.currentUser?.uid)
+            .set(userData)
+            .then((value) => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => DashBoardScreen())));
+      } catch (e) {
+        CustomSnackBar.buildSnackBar(title: "Alert", message: e.toString());
+      }
+    } else {
+      CustomSnackBar.buildSnackBar(
+          title: "Connection Problem", message: "No internet Connection");
     }
   }
 
@@ -136,18 +171,102 @@ class FirebaseServices {
         print(formattedEndDate.isBefore(now));
 
         if (!formattedStartDate.isBefore(now)) {
-          Constants().showToast("Campaign will be started soon");
+          CustomSnackBar.buildSnackBar(
+              title: "Alert", message: "Campaign will be started soon");
         } else if (!formattedEndDate.isAfter(now)) {
-          Constants().showToast("Campaign has been ended");
+          CustomSnackBar.buildSnackBar(
+              title: "Alert", message: "Campaign has been ended");
         } else {
-          Constants().showToast("donate");
+          CustomSnackBar.buildSnackBar(title: "Alert", message: "Done");
 
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (_) => DonationQuestionRecordsScreen()));
+            builder: (_) => DonationQuestionRecordsScreen(
+                campaignId: querySnapshot.docs[0].id),
+          ));
         }
       } else {
-        Constants().showToast("Invalid QR Code");
+        CustomSnackBar.buildSnackBar(
+            title: "Alert", message: "Invalid QR Code");
       }
     });
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getAssessments() {
+    var assessments =
+        FirebaseFirestore.instance.collection('assessments').get();
+    return assessments;
+  }
+
+  Future<void> sendDonationRequest(
+      {required BuildContext context,
+      required String campaignId,
+      required Map<String, String> assessmentResult,
+      required String donorId}) async {
+    if (networkController.connectionStatus.value != ConnectionEnum.noInternet) {
+      firestore
+          .collection("donors")
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((value) {
+        //var data = value.data();
+        var donorId = value["donorId"];
+        var name = value["fullName"];
+        var nic = value["nic"];
+
+        final Map<String, String> mappedData = assessmentResult;
+        /* mappedData["donorId"] = donorId;
+      mappedData["donorName"] = name;
+      mappedData["nic"] = nic;*/
+
+        print(mappedData);
+
+        try {
+          firestore
+              .collection("campaigns")
+              .doc(campaignId)
+              .collection("donorRequests")
+              .doc(donorId)
+              .set({
+            "donorId": donorId,
+            "donorName": name,
+            "nic": nic,
+            "request": "yes"
+          }).then((value) {
+            firestore
+                .collection("campaigns")
+                .doc(campaignId)
+                .collection("donorRequests")
+                .doc(donorId)
+                .collection("answers")
+                .doc("result")
+                .set(assessmentResult)
+                .then((value) {
+              Constants().showToast("Request Sent. please wait until Confirm");
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (ctx) => DashBoardScreen()));
+            });
+          });
+        } catch (e) {
+          Constants().showToast("Something went wrong");
+          CustomSnackBar.buildSnackBar(
+              title: "Alert", message: "Something went wrong");
+        }
+      });
+    } else {
+      CustomSnackBar.buildSnackBar(
+          title: "Connection Problem", message: "No internet Connection");
+    }
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getDonorData(String donorId) {
+    return firestore.collection('donors').doc(donorId).get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getDonorHistory(String donorId) {
+    return firestore
+        .collection('donors')
+        .doc(donorId)
+        .collection("history")
+        .get();
   }
 }

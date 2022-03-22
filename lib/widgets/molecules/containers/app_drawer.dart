@@ -1,7 +1,9 @@
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
+import 'package:donor_app/screens/auth/sign_in_screen.dart';
 import 'package:donor_app/widgets/atoms/app_heading.dart';
 import 'package:donor_app/widgets/atoms/app_label.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:select_form_field/select_form_field.dart';
 import 'package:switcher_button/switcher_button.dart';
@@ -55,11 +57,9 @@ class AppDrawer extends StatelessWidget {
                     ],
                   ),
                 )),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SelectFormField(
-
                 type: SelectFormFieldType.dropdown,
                 // or can be dialog
                 initialValue: 'EN',
@@ -70,14 +70,16 @@ class AppDrawer extends StatelessWidget {
                 onSaved: (val) => print(val),
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(Icons.notifications),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   AppLabel(text: "Notifications", widgetSize: WidgetSize.large),
                   Spacer(),
                   SwitcherButton(
@@ -93,13 +95,15 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: Row(
-
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(Icons.color_lens),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   AppLabel(text: "Dark Theme", widgetSize: WidgetSize.large),
                   Spacer(),
                   SwitcherButton(
@@ -110,77 +114,104 @@ class AppDrawer extends StatelessWidget {
                     },
                     onColor: Constants.appColorBrownRed,
                     offColor: Constants.appColorGray,
-
                   ),
-
                 ],
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: InkWell(
-                onTap: (){print("logout");},
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (_) => SignInScreen()));
+                },
                 child: Row(
                   children: [
                     Icon(Icons.logout),
-                    SizedBox(width: 10,),
-                    AppLabel(text: "Log Out", widgetSize: WidgetSize.large,textColor: Constants.appColorBrownRed,)
+                    SizedBox(
+                      width: 10,
+                    ),
+                    AppLabel(
+                      text: "Log Out",
+                      widgetSize: WidgetSize.large,
+                      textColor: Constants.appColorBrownRed,
+                    )
                   ],
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Divider(thickness: 1,color: Constants.appColorBlack,),
+              child: Divider(
+                thickness: 1,
+                color: Constants.appColorBlack,
+              ),
             ),
-
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: InkWell(
-                onTap: (){print("about us");},
+                onTap: () {
+                  print("about us");
+                },
                 child: Row(
                   children: [
                     Icon(Icons.account_box_outlined),
-                    SizedBox(width: 10,),
-                    AppLabel(text: "About Us", widgetSize: WidgetSize.large,)
+                    SizedBox(
+                      width: 10,
+                    ),
+                    AppLabel(
+                      text: "About Us",
+                      widgetSize: WidgetSize.large,
+                    )
                   ],
                 ),
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: InkWell(
-                onTap: (){print("help");},
+                onTap: () {
+                  print("help");
+                },
                 child: Row(
                   children: [
                     Icon(Icons.help),
-                    SizedBox(width: 10,),
-                    AppLabel(text: "Help", widgetSize: WidgetSize.large,)
+                    SizedBox(
+                      width: 10,
+                    ),
+                    AppLabel(
+                      text: "Help",
+                      widgetSize: WidgetSize.large,
+                    )
                   ],
                 ),
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: InkWell(
-                onTap: (){print("share");},
+                onTap: () {
+                  print("share");
+                },
                 child: Row(
                   children: [
                     Icon(Icons.share),
-                    SizedBox(width: 10,),
-                    AppLabel(text: "Share this App", widgetSize: WidgetSize.large,)
+                    SizedBox(
+                      width: 10,
+                    ),
+                    AppLabel(
+                      text: "Share this App",
+                      widgetSize: WidgetSize.large,
+                    )
                   ],
                 ),
               ),
             ),
-
-
-
-
           ],
         ),
       ),

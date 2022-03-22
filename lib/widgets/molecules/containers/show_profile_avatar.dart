@@ -1,14 +1,12 @@
-import 'dart:io';
-import 'package:donor_app/const/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-class ShowProfileAvatar extends StatelessWidget {
-  final String? imagePath;
 
+class ShowProfileAvatar extends StatelessWidget {
+  final String imagePath;
 
   const ShowProfileAvatar({
     Key? key,
-    this.imagePath,
-
+    required this.imagePath,
   }) : super(key: key);
 
   @override
@@ -19,27 +17,26 @@ class ShowProfileAvatar extends StatelessWidget {
       child: Stack(
         children: [
           buildImage(),
-
         ],
       ),
     );
   }
 
   Widget buildImage() {
-    final image = imagePath == null ? AssetImage("assets/images/profile_avatar.jpg") : AssetImage(imagePath!);
-
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Ink.image(
-          image: image,
+    return CircleAvatar(
+      radius: 75.0,
+      child: ClipOval(
+        child: CachedNetworkImage(
+          height: 150,
+          width: 150,
           fit: BoxFit.cover,
-          width: 160,
-          height: 160,
-          child: InkWell(onTap: (){}),
+          imageUrl: imagePath,
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) =>
+              Image.asset("assets/images/profile_avatar.jpg"),
         ),
       ),
+      backgroundColor: Colors.white,
     );
   }
-
 }
