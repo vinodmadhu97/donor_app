@@ -69,6 +69,7 @@ dependencies:
   get: ^4.6.1
   flutter_local_notifications: ^9.4.0
   rxdart: ^0.27.3
+  path_provider: ^2.0.9
 
 
 
