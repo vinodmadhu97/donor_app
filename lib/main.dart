@@ -1,6 +1,7 @@
 import 'package:donor_app/screens/auth/sign_up_screen.dart';
 import 'package:donor_app/screens/main/dash_board_screen.dart';
 import 'package:donor_app/screens/startup/onboarding_screen.dart';
+import 'package:donor_app/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +36,16 @@ class MyApp extends StatelessWidget {
             appBarTheme: AppBarTheme(color: Constants.appColorBrownRed),
             primaryColor: Constants.appColorBrownRed,
             primarySwatch: Constants.appColorbrownRedSwatch),
-        home: FutureBuilder(
+        home: NotificationTest()
+        /*FutureBuilder(
             future: Init.instance.initialize(),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return SplashLoading();
               }
               return UpComingScreen();
-            }));
+            })*/
+        );
   }
 }
 

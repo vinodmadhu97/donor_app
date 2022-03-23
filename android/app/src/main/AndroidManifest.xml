@@ -18,6 +18,8 @@
            android:value="AIzaSyBbMzj0_405Yz9KLn6PwjmraVngTQ4SB28" />
 
         <activity
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
