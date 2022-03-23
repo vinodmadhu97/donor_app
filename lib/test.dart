@@ -44,14 +44,17 @@ class _NotificationTestState extends State<NotificationTest> {
           children: [
             ElevatedButton(
               onPressed: () {
-                NotificationApi.showNotification(
-                    title: "Hello Vinod", body: "How are you");
+                NotificationApi.showImageNotification(
+                    title: "Image", body: "How are you");
               },
-              child: Text("Simple Notification"),
+              child: Text("Image Notification"),
             ),
             ElevatedButton(
-              onPressed: () {},
-              child: Text("Scheduled Notification"),
+              onPressed: () {
+                NotificationApi.showSimpleNotification(
+                    title: "Simple", body: "How are you");
+              },
+              child: Text("simple Notification"),
             ),
             ElevatedButton(
               onPressed: () {},
@@ -81,13 +84,21 @@ class NotificationApi {
     });
   }
 
-  static Future showNotification(
+  static Future showImageNotification(
       {int id = 0, String? title, String? body, String? payload}) async {
-    return _notification.show(id, title, body, await _notificationDetails(),
+    return _notification.show(
+        id, title, body, await _imageNotificationDetails(),
         payload: payload);
   }
 
-  static Future _notificationDetails() async {
+  static Future showSimpleNotification(
+      {int id = 0, String? title, String? body, String? payload}) async {
+    return _notification.show(
+        id, title, body, await _simpleNotificationDetails(),
+        payload: payload);
+  }
+
+  static Future _imageNotificationDetails() async {
     var uri = Uri.https("www.picsum.photos", "/200/300");
     var bigPicturePath = await Utils.downloadFile(uri, "bigPicture");
     /*var largeIconPath = await Utils.downloadFile("", "largeIcon");*/
@@ -101,6 +112,17 @@ class NotificationApi {
             channelDescription: "channel description",
             importance: Importance.max,
             styleInformation: styleInformation),
+        iOS: IOSNotificationDetails());
+  }
+
+  static Future _simpleNotificationDetails() async {
+    return NotificationDetails(
+        android: AndroidNotificationDetails(
+          "channel id",
+          "channel name",
+          channelDescription: "channel description",
+          importance: Importance.max,
+        ),
         iOS: IOSNotificationDetails());
   }
 }
