@@ -5,6 +5,7 @@ import 'package:donor_app/const/custom_dialog_box.dart';
 import 'package:donor_app/controllers/network_controller.dart';
 import 'package:donor_app/screens/main/dash_board_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +35,15 @@ class FirebaseServices {
             .createUserWithEmailAndPassword(
                 email: email.trim(), password: password.trim())
             .then((value) async {
+          String? token = await FirebaseMessaging.instance.getToken();
+          var userId = FirebaseAuth.instance.currentUser!.uid;
+          if (token != null) {
+            await firestore
+                .collection("fcm")
+                .doc(userId)
+                .set({"token": token}, SetOptions(merge: true));
+          }
+
           HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
               "addUserRole",
               options:
@@ -69,7 +79,16 @@ class FirebaseServices {
           email: email,
           password: password,
         )
-            .then((auth) {
+            .then((auth) async {
+          String? token = await FirebaseMessaging.instance.getToken();
+          var userId = FirebaseAuth.instance.currentUser!.uid;
+          if (token != null) {
+            await firestore
+                .collection("fcm")
+                .doc(token)
+                .set({"enable": true}, SetOptions(merge: true));
+          }
+
           auth.user?.getIdTokenResult().then((idTokenResult) {
             print(idTokenResult.claims?['donor']);
             if (idTokenResult.claims?['donor']) {
@@ -268,5 +287,74 @@ class FirebaseServices {
         .doc(donorId)
         .collection("history")
         .get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getDonationRequests() {
+    return firestore
+        .collection('donationRequests')
+        .orderBy('publishedAt', descending: true)
+        .get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getCampaignPromotions() {
+    return firestore
+        .collection('campaignPromo')
+        .orderBy('publishedAt', descending: true)
+        .get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getPosters() {
+    return firestore
+        .collection('posters')
+        .orderBy('publishedAt', descending: true)
+        .get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getLatestCampaign() {
+    return firestore
+        .collection('campaignPromo')
+        .orderBy('publishedAt', descending: false)
+        .limitToLast(1)
+        .get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getLatestRequest() {
+    return firestore
+        .collection('donationRequests')
+        .orderBy('publishedAt', descending: true)
+        .limitToLast(1)
+        .get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getLatestPoster() {
+    return firestore
+        .collection('posters')
+        .orderBy('publishedAt', descending: true)
+        .limitToLast(1)
+        .get();
+  }
+
+  Future<void> deleteFcmToken() async {
+    try {
+      if (networkController.connectionStatus.value !=
+          ConnectionEnum.noInternet) {
+        CustomDialogBox.buildDialogBox();
+
+        await firestore
+            .collection("fcm")
+            .doc(auth.currentUser!.uid)
+            .delete()
+            .then((value) {
+          Get.back();
+        });
+      } else {
+        CustomSnackBar.buildSnackBar(
+            title: "Connection Problem", message: "No internet Connection");
+      }
+    } catch (e) {
+      Get.back();
+      CustomSnackBar.buildSnackBar(
+          title: "Error", message: "Something went wrong");
+    }
   }
 }

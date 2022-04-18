@@ -1,25 +1,31 @@
 import 'package:donor_app/const/constants.dart';
+import 'package:donor_app/const/custom_dialog_box.dart';
 import 'package:donor_app/const/widget_size.dart';
 import 'package:donor_app/screens/auth/sign_in_screen.dart';
+import 'package:donor_app/services/firebase_services.dart';
 import 'package:donor_app/widgets/atoms/app_heading.dart';
 import 'package:donor_app/widgets/atoms/app_label.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:select_form_field/select_form_field.dart';
 import 'package:switcher_button/switcher_button.dart';
 
+import '../../../controllers/language_controller.dart';
+
 class AppDrawer extends StatelessWidget {
+  var languageController = Get.find<LanguageController>();
   final List<Map<String, dynamic>> _items = [
     {
       'value': 'EN',
       'label': 'English',
     },
     {
-      'value': 'SIN',
+      'value': 'SI',
       'label': 'Sinhala',
     },
     {
-      'value': 'TAM',
+      'value': 'TA',
       'label': 'Tamil',
     },
   ];
@@ -62,12 +68,12 @@ class AppDrawer extends StatelessWidget {
               child: SelectFormField(
                 type: SelectFormFieldType.dropdown,
                 // or can be dialog
-                initialValue: 'EN',
+                initialValue: languageController.getLanguage(),
                 icon: Icon(Icons.language),
                 labelText: 'Language',
                 items: _items,
-                onChanged: (val) => print(val),
-                onSaved: (val) => print(val),
+                onChanged: (val) => languageController.setLanguage(val),
+                //onSaved: (val) => print(val),
               ),
             ),
             Padding(
@@ -97,35 +103,16 @@ class AppDrawer extends StatelessWidget {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.color_lens),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  AppLabel(text: "Dark Theme", widgetSize: WidgetSize.large),
-                  Spacer(),
-                  SwitcherButton(
-                    size: 40,
-                    value: true,
-                    onChange: (value) {
-                      print(value);
-                    },
-                    onColor: Constants.appColorBrownRed,
-                    offColor: Constants.appColorGray,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: InkWell(
                 onTap: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => SignInScreen()));
+                  CustomDialogBox.buildOkWithCancelDialog(
+                      description: "Do You want to Logout?",
+                      okOnclick: () async {
+                        await FirebaseServices().deleteFcmToken();
+                        FirebaseAuth.instance.signOut();
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) => SignInScreen()));
+                      });
                 },
                 child: Row(
                   children: [
@@ -153,9 +140,9 @@ class AppDrawer extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: InkWell(
-                onTap: () {
-                  print("about us");
-                },
+                onTap: () => Constants.openLink(
+                    url:
+                        'http://www.nbts.health.gov.lk/index.php/about/about-nbts'),
                 child: Row(
                   children: [
                     Icon(Icons.account_box_outlined),
@@ -174,9 +161,9 @@ class AppDrawer extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: InkWell(
-                onTap: () {
-                  print("help");
-                },
+                onTap: () => Constants.openLink(
+                    url:
+                        'http://www.nbts.health.gov.lk/index.php/donate-blood/donate-blood-2'),
                 child: Row(
                   children: [
                     Icon(Icons.help),
@@ -184,7 +171,7 @@ class AppDrawer extends StatelessWidget {
                       width: 10,
                     ),
                     AppLabel(
-                      text: "Help",
+                      text: "Who can Donate?",
                       widgetSize: WidgetSize.large,
                     )
                   ],
@@ -195,9 +182,8 @@ class AppDrawer extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
               child: InkWell(
-                onTap: () {
-                  print("share");
-                },
+                onTap: () => Constants.openLink(
+                    url: 'http://www.nbts.health.gov.lk/index.php/contact-us'),
                 child: Row(
                   children: [
                     Icon(Icons.share),
@@ -205,7 +191,7 @@ class AppDrawer extends StatelessWidget {
                       width: 10,
                     ),
                     AppLabel(
-                      text: "Share this App",
+                      text: "Contact",
                       widgetSize: WidgetSize.large,
                     )
                   ],

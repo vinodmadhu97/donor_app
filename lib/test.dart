@@ -1,11 +1,14 @@
 import 'dart:io';
 
-import 'package:donor_app/screens/main/BMI_calculation_screen.dart';
+import 'package:donor_app/screens/main/campaigns_screen.dart';
+import 'package:donor_app/screens/main/dash_board_screen.dart';
+import 'package:donor_app/screens/main/requests_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:rxdart/subjects.dart';
+import 'package:rxdart/rxdart.dart';
 
 class NotificationTest extends StatefulWidget {
   const NotificationTest({Key? key}) : super(key: key);
@@ -15,12 +18,62 @@ class NotificationTest extends StatefulWidget {
 }
 
 class _NotificationTestState extends State<NotificationTest> {
+  String? type;
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
     NotificationApi.init();
-    listenNotification();
+
+    // IN APP NOTIFICATION
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      print("------------------------------------>fg${message.data}");
+      NotificationApi.showImageNotification(
+          title: notification!.title, body: notification.body);
+      type = message.data['type'];
+      //listenNotification();
+      /*if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher',
+                channelDescription: channel.description,
+              ),
+            ));
+      }*/
+    });
+
+    //background notification
+
+    /*FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        print("------------------------------------>bg${message.data}");
+        if (message.data['type'] == "request") {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => RequestScreen()));
+        } else if (message.data['type'] == "campaign") {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => CampaignsScreen()));
+        } else {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => DashBoardScreen()));
+        }
+      }
+    });*/
   }
 
   void listenNotification() {
@@ -28,8 +81,18 @@ class _NotificationTestState extends State<NotificationTest> {
   }
 
   void onClickNotification(String? payload) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => BMICalculationScreen()));
+    if (type != null) {
+      if (type == "request") {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => RequestScreen()));
+      } else if (type == "campaign") {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => CampaignsScreen()));
+      } else {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => DashBoardScreen()));
+      }
+    }
   }
 
   @override
@@ -101,12 +164,11 @@ class NotificationApi {
   static Future _imageNotificationDetails() async {
     var uri = Uri.https("www.picsum.photos", "/200/300");
     var bigPicturePath = await Utils.downloadFile(uri, "bigPicture");
-    /*var largeIconPath = await Utils.downloadFile("", "largeIcon");*/
+    var largeIconPath = await Utils.downloadFile(uri, "largeIcon");
 
     var styleInformation = BigPictureStyleInformation(
-      FilePathAndroidBitmap(
-          bigPicturePath), /*largeIcon: FilePathAndroidBitmap(largeIconPath)*/
-    );
+        FilePathAndroidBitmap(bigPicturePath),
+        largeIcon: FilePathAndroidBitmap(largeIconPath));
     return NotificationDetails(
         android: AndroidNotificationDetails("channel id", "channel name",
             channelDescription: "channel description",

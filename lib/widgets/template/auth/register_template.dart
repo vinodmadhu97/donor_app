@@ -61,8 +61,10 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
     try {
       if (_profileUrl.isNotEmpty) {
         String filename = DateTime.now().microsecondsSinceEpoch.toString();
+
         firebaseStorage.Reference reference =
             firebaseStorage.FirebaseStorage.instance.ref().child(filename);
+
         firebaseStorage.UploadTask uploadTask =
             reference.putFile(Io.File(_profileUrl));
 
@@ -393,7 +395,8 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Each 4 Month", style: TextStyle(fontSize: 16)),
+                      Text("In every 4 Months time",
+                          style: TextStyle(fontSize: 16)),
                       Transform.scale(
                         scale: 1.5,
                         child: Radio<String>(
@@ -411,7 +414,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Each 6 month",
+                        "In every 6 Months time",
                         style: TextStyle(fontSize: 16),
                       ),
                       Transform.scale(
@@ -430,7 +433,8 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Each year", style: TextStyle(fontSize: 16)),
+                      Text("In every 12 Months time",
+                          style: TextStyle(fontSize: 16)),
                       Transform.scale(
                         scale: 1.5,
                         child: Radio<String>(

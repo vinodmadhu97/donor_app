@@ -1,29 +1,29 @@
-import 'dart:math';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:donor_app/const/constants.dart';
-import 'package:donor_app/screens/main/donate_screen.dart';
-import 'package:donor_app/screens/main/donation_qr_screen.dart';
-import 'package:donor_app/screens/main/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../screens/main/donation_qr_screen.dart';
+
 class DashBoardTemplate extends StatefulWidget {
-  final List<Map<String,dynamic>> navigationData;
+  final List<Map<String, dynamic>> navigationData;
   DashBoardTemplate({
     Key? key,
     required this.navigationData,
   }) : super(key: key);
 
   @override
-  _DashBoardTemplateState createState() => _DashBoardTemplateState(navigationData);
+  _DashBoardTemplateState createState() =>
+      _DashBoardTemplateState(navigationData);
 }
 
-class _DashBoardTemplateState extends State<DashBoardTemplate> with SingleTickerProviderStateMixin{
+class _DashBoardTemplateState extends State<DashBoardTemplate>
+    with SingleTickerProviderStateMixin {
   final autoSizeGroup = AutoSizeGroup();
   var _bottomNavIndex = 0; //default index of a first screen
 
-  final List<Map<String,dynamic>> navigationData;
+  final List<Map<String, dynamic>> navigationData;
 
   _DashBoardTemplateState(this.navigationData);
 
@@ -31,11 +31,10 @@ class _DashBoardTemplateState extends State<DashBoardTemplate> with SingleTicker
   void initState() {
     super.initState();
     final systemTheme = SystemUiOverlayStyle.light.copyWith(
-      systemNavigationBarColor: Color(0xff373A36),//system navigation color
+      systemNavigationBarColor: Color(0xff373A36), //system navigation color
       systemNavigationBarIconBrightness: Brightness.light,
     );
     SystemChrome.setSystemUIOverlayStyle(systemTheme);
-
   }
 
   @override
@@ -45,17 +44,18 @@ class _DashBoardTemplateState extends State<DashBoardTemplate> with SingleTicker
       body: NavigationScreen(
         navigationData[_bottomNavIndex]['navScreen'],
       ),
-      floatingActionButton:  Visibility(
+      floatingActionButton: Visibility(
         visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
         child: FloatingActionButton(
           elevation: 8,
           backgroundColor: Constants.appColorBrownRed,
           child: Icon(
-            Icons.favorite,
+            Icons.qr_code,
             color: Constants.appColorWhite,
           ),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>DonationQRScreen()));
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => DonationQRScreen()));
           },
         ),
       ),
@@ -63,7 +63,8 @@ class _DashBoardTemplateState extends State<DashBoardTemplate> with SingleTicker
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         itemCount: navigationData.length,
         tabBuilder: (int index, bool isActive) {
-          final color = isActive ? Constants.appColorBrownRed : Constants.appColorGray;
+          final color =
+              isActive ? Constants.appColorBrownRed : Constants.appColorGray;
           return Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +87,6 @@ class _DashBoardTemplateState extends State<DashBoardTemplate> with SingleTicker
             ],
           );
         },
-
         backgroundColor: Constants.appColorWhite,
         activeIndex: _bottomNavIndex,
         splashSpeedInMilliseconds: 300,

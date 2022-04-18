@@ -27,4 +27,29 @@ class CustomDialogBox {
           ],
         ));
   }
+
+  static buildOkWithCancelDialog(
+      {String title = "Alert",
+      required String description,
+      String confirmText = "Ok",
+      String cancelText = "Cancel",
+      required Function okOnclick}) {
+    Get.defaultDialog(
+        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+        title: title,
+        middleText: description,
+        backgroundColor: Colors.white,
+        titleStyle: TextStyle(color: Constants.appColorBrownRed),
+        middleTextStyle: TextStyle(color: Constants.appColorBlack),
+        textConfirm: confirmText,
+        textCancel: cancelText,
+        cancelTextColor: Constants.appColorBrownRed,
+        confirmTextColor: Colors.white,
+        buttonColor: Constants.appColorBrownRed,
+        barrierDismissible: false,
+        radius: 10,
+        onConfirm: () {
+          okOnclick();
+        });
+  }
 }

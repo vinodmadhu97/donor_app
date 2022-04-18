@@ -77,7 +77,7 @@ class _SignInTemplateState extends State<SignInTemplate> {
                             Padding(
                               padding: const EdgeInsets.only(right: 24),
                               child: Text(
-                                "SIGN In",
+                                "SIGN IN",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontFamily: "Kanit-Bold",
@@ -133,7 +133,7 @@ class _SignInTemplateState extends State<SignInTemplate> {
                                 height: 40,
                               ),
                               FilledRoundedButton(
-                                  text: "Sign Up",
+                                  text: "Sign In",
                                   widgetSize: WidgetSize.large,
                                   clickEvent: () {
                                     //CHECKING THE INPUT DATA VALIDATION
@@ -163,7 +163,7 @@ class _SignInTemplateState extends State<SignInTemplate> {
                                   ),
                                   InkWell(
                                     child: Text(
-                                      "Sign In",
+                                      "Sign Up",
                                       style: TextStyle(
                                           color: Constants.appColorBrownRed),
                                     ),

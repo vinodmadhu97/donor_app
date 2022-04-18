@@ -4,7 +4,9 @@ import 'package:donor_app/const/widget_size.dart';
 import 'package:donor_app/services/firebase_services.dart';
 import 'package:donor_app/widgets/atoms/app_heading.dart';
 import 'package:donor_app/widgets/atoms/app_label.dart';
+import 'package:donor_app/widgets/molecules/containers/no_data_card_view.dart';
 import 'package:donor_app/widgets/molecules/containers/show_profile_avatar.dart';
+import 'package:donor_app/widgets/shimmers/profile_shimmer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
@@ -46,7 +48,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                     return Text(snapshot.error.toString());
                   }
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Text("Loading");
+                    return ProfileShimmer();
                   }
 
                   var date = snapshot.data!['nextDonationDate'];
@@ -159,7 +161,9 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                                 Border.all(color: Constants.appColorBrownRed),
                             borderRadius: BorderRadius.circular(8)),
                         child: Text(
-                          snapshot.data!['nextDonationDate'],
+                          snapshot.data!['nextDonationDate'].toString().isEmpty
+                              ? "YYYY-MM-DD"
+                              : snapshot.data!['nextDonationDate'],
                           style: TextStyle(color: Constants.appColorBrownRed),
                         ),
                         padding: EdgeInsets.all(10),
@@ -277,79 +281,88 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                       return Text(snapshot.error.toString());
                     }
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text("Loading");
+                      return Text("");
                     }
-                    return ListView.builder(
-                        itemCount: snapshot.data?.docs.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Card(
-                              elevation: 5,
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Container(
-                                width: double.infinity,
-                                height: 150,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                        //color: Colors.red,
-                                        child: Image.asset(
-                                          "assets/images/blood_drop.png",
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 5,
-                                      child: Container(
-                                        color: Colors.white,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 6.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              AppLabel(
-                                                text: snapshot.data?.docs[index]
-                                                    ["location"],
-                                                widgetSize: WidgetSize.large,
-                                                textColor:
-                                                    Constants.appColorBrownRed,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              AppLabel(
-                                                text: snapshot.data?.docs[index]
-                                                    ["barcode"],
-                                                widgetSize: WidgetSize.medium,
-                                                textColor:
-                                                    Constants.appColorBlack,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                              AppLabel(
-                                                text: snapshot.data?.docs[index]
-                                                    ["date"],
-                                                widgetSize: WidgetSize.medium,
-                                                textColor:
-                                                    Constants.appColorBlack,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ],
+                    return snapshot.data?.docs.length == 0
+                        ? NoDataCardView(
+                            title: "Participate Your First Donation")
+                        : ListView.builder(
+                            itemCount: snapshot.data?.docs.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                  elevation: 5,
+                                  clipBehavior: Clip.antiAlias,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 150,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            //color: Colors.red,
+                                            child: Image.asset(
+                                              "assets/images/blood_drop.png",
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ));
-                        });
+                                        Expanded(
+                                          flex: 5,
+                                          child: Container(
+                                            color: Colors.white,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 6.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  AppLabel(
+                                                    text: snapshot
+                                                            .data?.docs[index]
+                                                        ["location"],
+                                                    widgetSize:
+                                                        WidgetSize.large,
+                                                    textColor: Constants
+                                                        .appColorBrownRed,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  AppLabel(
+                                                    text: snapshot
+                                                            .data?.docs[index]
+                                                        ["barcode"],
+                                                    widgetSize:
+                                                        WidgetSize.medium,
+                                                    textColor:
+                                                        Constants.appColorBlack,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                  AppLabel(
+                                                    text: snapshot.data
+                                                        ?.docs[index]["date"],
+                                                    widgetSize:
+                                                        WidgetSize.medium,
+                                                    textColor:
+                                                        Constants.appColorBlack,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ));
+                            });
                   }),
             )
           ],

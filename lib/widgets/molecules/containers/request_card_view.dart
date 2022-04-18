@@ -5,9 +5,21 @@ import 'package:donor_app/widgets/atoms/app_label.dart';
 import 'package:flutter/material.dart';
 
 class RequestCardView extends StatelessWidget {
-  const RequestCardView({
-    Key? key,
-  }) : super(key: key);
+  final String bloodGroup;
+  final String title;
+  final String address;
+  final String startDate;
+  final String startTime;
+  final String endTime;
+  const RequestCardView(
+      {Key? key,
+      required this.bloodGroup,
+      required this.title,
+      required this.address,
+      required this.startDate,
+      required this.startTime,
+      required this.endTime})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +41,23 @@ class RequestCardView extends StatelessWidget {
                 ),
               ],
             ),
-
             child: Padding(
               padding: const EdgeInsets.only(left: 100.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppHeading(text: "Ragama Hospital",widgetSize: WidgetSize.small,),
-                  AppLabel(text: "Main road Ragama",
+                  AppHeading(
+                    text: title,
+                    widgetSize: WidgetSize.small,
+                  ),
+                  AppLabel(
+                    text: address,
                     widgetSize: WidgetSize.medium,
                     textColor: Colors.grey,
                     fontWeight: FontWeight.w500,
                   ),
-
                   AppLabel(
-                    text: "High",
-                    widgetSize: WidgetSize.medium,
-                    textColor: Constants.appColorBrownRed,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  AppLabel(
-                    text: "Today before 2.00 pm",
+                    text: "$startDate \nat $startTime.00 - $endTime.00",
                     widgetSize: WidgetSize.medium,
                     textColor: Constants.appColorBrownRed,
                     fontWeight: FontWeight.w600,
@@ -57,15 +65,15 @@ class RequestCardView extends StatelessWidget {
                   Row(
                     children: [
                       ElevatedButton(
-                          onPressed: (){print("accepted");},
-                          child: Text("Accept")),
-                      SizedBox(width: 5,),
-                      ElevatedButton(
-                          onPressed: (){print("accepted");},
-                          child: Text("Share"))
+                          onPressed: () {
+                            print("accepted");
+                          },
+                          child: Text("Active")),
+                      SizedBox(
+                        width: 5,
+                      ),
                     ],
                   )
-
                 ],
               ),
             ),

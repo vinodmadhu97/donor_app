@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
 import 'package:donor_app/widgets/atoms/app_label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CampaignCardView extends StatelessWidget {
   final String imgUrl;
@@ -9,13 +11,13 @@ class CampaignCardView extends StatelessWidget {
   final String location;
   final String time;
 
-  CampaignCardView({
-    Key? key,
-    required this.title,
-    required this.imgUrl,
-    required this.location,
-    required this.time
-  }) : super(key: key);
+  CampaignCardView(
+      {Key? key,
+      required this.title,
+      required this.imgUrl,
+      required this.location,
+      required this.time})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +25,26 @@ class CampaignCardView extends StatelessWidget {
         elevation: 5,
         //shadowColor: Colors.red,
         clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Container(
           width: double.infinity,
-          height: 150,
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
                 flex: 3,
-                child: Container(
+                child: ClipRRect(
                   //color: Colors.red,
-                  child: Image.asset(imgUrl,fit: BoxFit.cover,),
+                  borderRadius: BorderRadius.circular(4),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: imgUrl,
+                    placeholder: (ctx, url) => SpinKitCircle(
+                      color: Constants.appColorBrownRed,
+                    ),
+                    errorWidget: (ctx, url, error) =>
+                        Image.asset("assets/images/img_place_holder.png"),
+                  ),
                 ),
               ),
               Expanded(
@@ -49,23 +57,24 @@ class CampaignCardView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        AppLabel(text: title,
+                        AppLabel(
+                          text: title,
                           widgetSize: WidgetSize.large,
                           textColor: Constants.appColorBrownRed,
                           fontWeight: FontWeight.w500,
                         ),
-                        AppLabel(text: location,
+                        AppLabel(
+                          text: location,
                           widgetSize: WidgetSize.medium,
                           textColor: Colors.grey,
                           fontWeight: FontWeight.w500,
                         ),
-
-                        AppLabel(text: time,
+                        AppLabel(
+                          text: time,
                           widgetSize: WidgetSize.medium,
                           textColor: Constants.appColorBlack,
                           fontWeight: FontWeight.w600,
                         ),
-
                       ],
                     ),
                   ),
@@ -73,7 +82,6 @@ class CampaignCardView extends StatelessWidget {
               )
             ],
           ),
-        )
-    );
+        ));
   }
 }
