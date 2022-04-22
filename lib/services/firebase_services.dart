@@ -66,7 +66,7 @@ class FirebaseServices {
       }
     } else {
       CustomSnackBar.buildSnackBar(
-          title: "Connection Problem", message: "No internet Connection");
+          title: "alert".tr, message: "no internet connection".tr);
     }
   }
 
@@ -98,7 +98,8 @@ class FirebaseServices {
             } else {
               Navigator.of(context).pop();
               CustomSnackBar.buildSnackBar(
-                  title: "Alert", message: "Invalid User name or password");
+                  title: "alert".tr,
+                  message: "invalid user name or password".tr);
             }
           });
         });
@@ -107,12 +108,11 @@ class FirebaseServices {
         _status = AuthExceptionHandler.handleException(error);
         errorMsg = AuthExceptionHandler.generateExceptionMessage(_status);
 
-        CustomSnackBar.buildSnackBar(
-            title: "Connection Problem", message: errorMsg!);
+        CustomSnackBar.buildSnackBar(title: "alert".tr, message: errorMsg!);
       }
     } else {
       CustomSnackBar.buildSnackBar(
-          title: "Connection Problem", message: "No internet Connection");
+          title: "alert".tr, message: "no internet connection".tr);
     }
   }
 
@@ -153,11 +153,11 @@ class FirebaseServices {
             .then((value) => Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (_) => DashBoardScreen())));
       } catch (e) {
-        CustomSnackBar.buildSnackBar(title: "Alert", message: e.toString());
+        CustomSnackBar.buildSnackBar(title: "alert".tr, message: e.toString());
       }
     } else {
       CustomSnackBar.buildSnackBar(
-          title: "Connection Problem", message: "No internet Connection");
+          title: "alert".tr, message: "no internet connection".tr);
     }
   }
 
@@ -191,12 +191,13 @@ class FirebaseServices {
 
         if (!formattedStartDate.isBefore(now)) {
           CustomSnackBar.buildSnackBar(
-              title: "Alert", message: "Campaign will be started soon");
+              title: "alert".tr, message: "Campaign will be started soon".tr);
         } else if (!formattedEndDate.isAfter(now)) {
           CustomSnackBar.buildSnackBar(
-              title: "Alert", message: "Campaign has been ended");
+              title: "alert".tr, message: "Campaign has been ended".tr);
         } else {
-          CustomSnackBar.buildSnackBar(title: "Alert", message: "Done");
+          CustomSnackBar.buildSnackBar(
+              title: "alert".tr, message: "Successful".tr);
 
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (_) => DonationQuestionRecordsScreen(
@@ -205,7 +206,7 @@ class FirebaseServices {
         }
       } else {
         CustomSnackBar.buildSnackBar(
-            title: "Alert", message: "Invalid QR Code");
+            title: "alert".tr, message: "Invalid QR Code".tr);
       }
     });
   }
@@ -260,20 +261,21 @@ class FirebaseServices {
                 .doc("result")
                 .set(assessmentResult)
                 .then((value) {
-              Constants().showToast("Request Sent. please wait until Confirm");
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (ctx) => DashBoardScreen()));
+              CustomSnackBar.buildSnackBar(
+                  title: "alert".tr,
+                  message: "Request Sent. please wait until it Confirm".tr);
             });
           });
         } catch (e) {
-          Constants().showToast("Something went wrong");
           CustomSnackBar.buildSnackBar(
-              title: "Alert", message: "Something went wrong");
+              title: "alert".tr, message: "Something went wrong".tr);
         }
       });
     } else {
       CustomSnackBar.buildSnackBar(
-          title: "Connection Problem", message: "No internet Connection");
+          title: "alert".tr, message: "no internet connection".tr);
     }
   }
 
@@ -349,12 +351,12 @@ class FirebaseServices {
         });
       } else {
         CustomSnackBar.buildSnackBar(
-            title: "Connection Problem", message: "No internet Connection");
+            title: "alert".tr, message: "no internet connection".tr);
       }
     } catch (e) {
       Get.back();
       CustomSnackBar.buildSnackBar(
-          title: "Error", message: "Something went wrong");
+          title: "alert".tr, message: "Something went wrong".tr);
     }
   }
 }

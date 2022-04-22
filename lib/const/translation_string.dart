@@ -75,7 +75,39 @@ class TranslationString extends Translations {
           "hours": "Hours",
           "participate your first donation": "Participate your First Donation",
           "please move your camera over the QR code":
-              "Please move your Camera over the QR code"
+              "Please move your Camera over the QR code",
+          "no internet connection": "No internet Connection",
+          "invalid user name or password": "Invalid User name or Password",
+          "Campaign will be started soon": "Campaign will be started soon",
+          "Campaign has been ended": "Campaign has been ended",
+          "Successful": "Successful",
+          "Invalid QR Code": "Invalid QR Code",
+          "Request Sent. please wait until it Confirm":
+              "Request Sent. please wait until it Confirm",
+          "Something went wrong": "Something went wrong",
+          "Over Weight": "Over Weight",
+          "Normal": "Normal",
+          "Under Weight": "Under Weight",
+          "You have a higher than normal body weight. Try to exercise more":
+              "You have a higher than normal body weight. Try to exercise more",
+          "You have a normal body weight. good job":
+              "You have a normal body weight. good job",
+          "You have lower than normal body weight. You can eat a bit more":
+              "You have lower than normal body weight. You can eat a bit more",
+          "CALCULATOR": "CALCULATOR",
+          "MALE": "MALE",
+          "FEMALE": "FEMALE",
+          "HEIGHT": "HEIGHT",
+          "WEIGHT": "WEIGHT",
+          "Age": "Age",
+          "Years": "Years",
+          "CALCULATE": "CALCULATE",
+          "Please Select a gender": "Please Select a gender",
+          "Please Select a height": "Please Select a height",
+          "Please Select a weight": "Please Select a weight",
+          "Please Select a age": "Please Select a age",
+          "Result": "Result",
+          "RE-CALCULATE": "RE-CALCULATE"
         },
         "si_LK": {
           "home": "මුල් පිටුව",
@@ -86,7 +118,7 @@ class TranslationString extends Translations {
           "yes": "ඔව්",
           "no": "නැත",
           "n/a": "නැත",
-          "alert": "අනතුරු ඇඟවීම",
+          "alert": "ඇඟවීම",
           "please wait": "කරුණාකර රැඳී සිටින්න",
           "notification settings": "දැනුම්දීම් සැකසුම්",
           "logout": "පිටවීම",
@@ -149,7 +181,39 @@ class TranslationString extends Translations {
           "hours": "පැය",
           "participate your first donation": "ඔබේ පළමු පරිත්‍යාගයට සහභාගී වන්න",
           "please move your camera over the QR code":
-              "කරුණාකර ඔබේ කැමරාව QR කේතය හරහා ගෙන යන්න"
+              "කරුණාකර ඔබේ කැමරාව QR කේතය හරහා ගෙන යන්න",
+          "no internet connection": "අන්තර්ජාල සම්බන්ධතාවයක් නොමැත",
+          "invalid user name or password": "අවලංගු පරිශීලක නාමයක් හෝ මුරපදයක්",
+          "Campaign will be started soon": "කඳවුර ඉක්මනින් ආරම්භ වේ",
+          "Campaign has been ended": "කඳවුර අවසන් කර ඇත",
+          "Successful": "සාර්ථකයි",
+          "Invalid QR Code": "වලංගු නොවන QR කේතයකි",
+          "Request Sent. please wait until it Confirm":
+              "ඉල්ලීම යවන ලදී. කරුණාකර එය තහවුරු කරන තෙක් රැඳී සිටින්න",
+          "Something went wrong": "යමක් වැරදී ඇත",
+          "Over Weight": "බර වැඩියි",
+          "Normal": "සාමාන්යයි",
+          "Under Weight": "බර අඩුයි",
+          "You have a higher than normal body weight. Try to exercise more":
+              "ඔබට සාමාන්‍ය ශරීර බරට වඩා වැඩි බරක් ඇත. වැඩිපුර ව්‍යායාම කිරීමට උත්සාහ කරන්න",
+          "You have a normal body weight. good job":
+              "ඔබට සාමාන්‍ය ශරීර බරක් ඇත. හොඳ වැඩක්",
+          "You have lower than normal body weight. You can eat a bit more":
+              "ඔබට සාමාන්‍ය ශරීර බරට වඩා අඩුයි.",
+          "CALCULATOR": "ගණකය",
+          "MALE": "පුරුෂ",
+          "FEMALE": "ස්ත්‍රී",
+          "HEIGHT": "උස",
+          "WEIGHT": "බර",
+          "Age": "වයස",
+          "Years": "අවුරුදු",
+          "CALCULATE": "ගණනය කරන්න",
+          "Please Select a gender": "කරුණාකර ස්ත්‍රී පුරුෂ භාවය තෝරන්න",
+          "Please Select a height": "කරුණාකර උස තෝරන්න",
+          "Please Select a weight": "කරුණාකර බර තෝරන්න",
+          "Please Select a age": "කරුණාකර වයස තෝරන්න",
+          "Result": "ප්‍රතිඵලය",
+          "RE-CALCULATE": "නැවත ගණනය කරන්න"
         },
         "ta_LK": {
           "home": "முகப்பு பக்கம்",
@@ -224,7 +288,40 @@ class TranslationString extends Translations {
           "participate your first donation":
               "உங்கள் முதல் நன்கொடையில் பங்கேற்கவும்",
           "please move your camera over the QR code":
-              "உங்கள் கேமராவை QR குறியீட்டின் மேல் நகர்த்தவும்"
+              "உங்கள் கேமராவை QR குறியீட்டின் மேல் நகர்த்தவும்",
+          "no internet connection": "இணைய இணைப்பு இல்லை",
+          "invalid user name or password":
+              "தவறான பயனர் பெயர் அல்லது கடவுச்சொல்",
+          "Campaign will be started soon": "விரைவில் முகாம் தொடங்கப்படும்",
+          "Campaign has been ended": "முகாம் நிறைவடைந்தது",
+          "Successful": "வெற்றியடைந்தது",
+          "Invalid QR Code": "தவறான QR குறியீடு",
+          "Request Sent. please wait until it Confirm":
+              "வேண்டுகோள் அனுப்பப்பட்டது. அதை உறுதிப்படுத்தும் வரை காத்திருக்கவும்",
+          "Something went wrong": "ஏதோ தவறு நடந்துவிட்டது",
+          "Over Weight": "அதிக எடை",
+          "Normal": "இயல்பானது",
+          "Under Weight": "எடைக்கு கீழ்",
+          "You have a higher than normal body weight. Try to exercise more":
+              "நீங்கள் சாதாரண உடல் எடையை விட அதிகமாக உள்ளீர்கள். மேலும் உடற்பயிற்சி செய்ய முயற்சி செய்யுங்கள்",
+          "You have a normal body weight. good job":
+              "உங்களுக்கு சாதாரண உடல் எடை உள்ளது. நல்ல வேலை",
+          "You have lower than normal body weight. You can eat a bit more":
+              "உங்கள் உடல் எடை இயல்பை விட குறைவாக உள்ளது. நீங்கள் இன்னும் கொஞ்சம் சாப்பிடலாம்",
+          "CALCULATOR": "கால்குலேட்டர்",
+          "MALE": "ஆண்",
+          "FEMALE": "பெண்",
+          "HEIGHT": "உயரம்",
+          "WEIGHT": "எடை",
+          "Age": "வயது",
+          "Years": "ஆண்டுகள்",
+          "CALCULATE": "கணக்கிடு",
+          "Please Select a gender": "பாலினத்தைத் தேர்ந்தெடுக்கவும்",
+          "Please Select a height": "உயரத்தைத் தேர்ந்தெடுக்கவும்",
+          "Please Select a weight": "எடையைத் தேர்ந்தெடுக்கவும்",
+          "Please Select a age": "தயவுசெய்து வயதைத் தேர்ந்தெடுக்கவும்",
+          "Result": "விளைவாக",
+          "RE-CALCULATE": "மீண்டும் கணக்கிடு"
         },
       };
 }

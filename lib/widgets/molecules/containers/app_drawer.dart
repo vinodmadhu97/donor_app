@@ -3,11 +3,11 @@ import 'package:donor_app/const/custom_dialog_box.dart';
 import 'package:donor_app/const/widget_size.dart';
 import 'package:donor_app/screens/auth/sign_in_screen.dart';
 import 'package:donor_app/services/firebase_services.dart';
-import 'package:donor_app/widgets/atoms/app_heading.dart';
 import 'package:donor_app/widgets/atoms/app_label.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:select_form_field/select_form_field.dart';
 import 'package:system_settings/system_settings.dart';
 
@@ -30,6 +30,11 @@ class AppDrawer extends StatelessWidget {
     },
   ];
 
+  Future<PackageInfo> getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -50,16 +55,40 @@ class AppDrawer extends StatelessWidget {
                         height: 70,
                         width: 70,
                       ),
-                      AppHeading(
-                        text: "The Donor",
-                        widgetSize: WidgetSize.small,
-                        color: Constants.appColorBrownRed,
+                      SizedBox(
+                        height: 20,
                       ),
-                      AppLabel(
-                        text: "Version 1.1.0",
-                        widgetSize: WidgetSize.medium,
-                        textColor: Constants.appColorBrownRed,
-                      )
+                      FutureBuilder(
+                          future: getAppVersion(),
+                          builder: (ctx, AsyncSnapshot<PackageInfo> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Text("");
+                            }
+                            print("------->${snapshot.data!.appName}");
+                            return AppLabel(
+                              text: snapshot.data!.appName,
+                              widgetSize: WidgetSize.medium,
+                              textColor: Constants.appColorBrownRed,
+                            );
+                          }),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      FutureBuilder(
+                          future: getAppVersion(),
+                          builder: (ctx, AsyncSnapshot<PackageInfo> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Text("");
+                            }
+                            print("------->${snapshot.data!.version}");
+                            return AppLabel(
+                              text: snapshot.data!.version,
+                              widgetSize: WidgetSize.medium,
+                              textColor: Constants.appColorBrownRed,
+                            );
+                          }),
                     ],
                   ),
                 )),
