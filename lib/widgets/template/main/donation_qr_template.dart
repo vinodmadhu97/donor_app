@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/services/firebase_services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class DonationQrTemplate extends StatefulWidget {
@@ -106,7 +107,7 @@ class _DonationQrTemplateState extends State<DonationQrTemplate> {
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width * 0.6,
       child: Text(
-        "Please Move your Camera Over the QR Code",
+        "please move your camera over the QR code".tr,
         textAlign: TextAlign.center,
         style: TextStyle(color: Constants.appColorGray),
       ),

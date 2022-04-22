@@ -9,6 +9,7 @@ import 'package:donor_app/widgets/molecules/input_fields/app_password_field.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 
 class SignUpTemplate extends StatefulWidget {
   SignUpTemplate({Key? key}) : super(key: key);
@@ -72,7 +73,7 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
                       Padding(
                         padding: const EdgeInsets.only(right: 24),
                         child: Text(
-                          "SIGN UP",
+                          "signup".tr,
                           style: TextStyle(
                               color: Colors.white,
                               fontFamily: "Kanit-Bold",
@@ -100,11 +101,13 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
                             controller: _emailController,
                             inputType: TextInputType.emailAddress,
                             validator: MultiValidator([
-                              RequiredValidator(errorText: "Email is Required"),
-                              EmailValidator(errorText: "Enter a Valid Email")
+                              RequiredValidator(
+                                  errorText: "email is required".tr),
+                              EmailValidator(
+                                  errorText: "enter a valid email".tr)
                             ]),
                             iconData: Icons.email,
-                            hintText: "Email"),
+                            hintText: "email".tr),
                         SizedBox(
                           height: 30,
                         ),
@@ -114,13 +117,13 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
                           inputType: TextInputType.text,
                           validator: MultiValidator([
                             RequiredValidator(
-                                errorText: "Password is Required"),
+                                errorText: "password is required".tr),
                             MinLengthValidator(6,
                                 errorText:
-                                    "password must be at least 6 characters")
+                                    "password must be at least 6 characters".tr)
                           ]),
                           iconData: Icons.security,
-                          hintText: "Password",
+                          hintText: "password".tr,
                         ),
                         SizedBox(
                           height: 40,
@@ -147,7 +150,7 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
                                   hintStyle: TextStyle(
                                       color: Constants.appColorGray,
                                       fontSize: 14),
-                                  hintText: "Confirm Password",
+                                  hintText: "confirm password".tr,
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Constants.appColorGray),
@@ -163,9 +166,9 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
                                 ),
                                 validator: (val) {
                                   if (val!.isEmpty)
-                                    return 'Re enter your password';
+                                    return 're enter your password'.tr;
                                   if (val != _passwordController.text)
-                                    return 'Password does not matched';
+                                    return 'password does not matched'.tr;
                                   return null;
                                 }),
                           ),
@@ -174,7 +177,7 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
                           height: 60,
                         ),
                         FilledRoundedButton(
-                            text: "Sign Up",
+                            text: "signup".tr,
                             widgetSize: WidgetSize.large,
                             clickEvent: () {
                               //CHECKING THE INPUT DATA VALIDATION
@@ -191,29 +194,35 @@ class _SignUpTemplateState extends State<SignUpTemplate> {
                         SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Already have an Account?"),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            InkWell(
-                              child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                    color: Constants.appColorBrownRed),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 40.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  child: Text("already have an account".tr)),
+                              SizedBox(
+                                width: 10,
                               ),
-                              onTap: () {
-                                //todo move to the sign in
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            SignInScreen()));
-                                print("sign In");
-                              },
-                            )
-                          ],
+                              Expanded(
+                                child: InkWell(
+                                  child: Text(
+                                    "login".tr,
+                                    style: TextStyle(
+                                        color: Constants.appColorBrownRed),
+                                  ),
+                                  onTap: () {
+                                    //todo move to the sign in
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                SignInScreen()));
+                                    print("sign In");
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),

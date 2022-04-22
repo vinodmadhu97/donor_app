@@ -2,7 +2,7 @@ import 'package:donor_app/const/constants.dart';
 import 'package:donor_app/const/widget_size.dart';
 import 'package:flutter/material.dart';
 
-import '../../atoms/app_heading.dart';
+import '../../atoms/app_label.dart';
 
 class NoDataCardView extends StatelessWidget {
   final String title;
@@ -42,10 +42,10 @@ class NoDataCardView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AppHeading(
+                        AppLabel(
                           text: title,
                           widgetSize: WidgetSize.medium,
-                          color: Constants.appColorGray,
+                          textColor: Constants.appColorGray,
                           fontWeight: FontWeight.w500,
                         ),
                       ],

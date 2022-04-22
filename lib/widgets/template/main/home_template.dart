@@ -13,12 +13,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/language_controller.dart';
 import '../../molecules/containers/request_card_view.dart';
 
 class HomeTemplate extends StatelessWidget {
   final List<Map<String, dynamic>> menuBtnData;
-  var languageController = Get.put(LanguageController(), permanent: true);
   HomeTemplate({Key? key, required this.menuBtnData}) : super(key: key);
 
   @override
@@ -28,7 +26,7 @@ class HomeTemplate extends StatelessWidget {
       /*extendBodyBehindAppBar: true,*/
       drawer: AppDrawer(),
       appBar: AppBar(
-        title: Text("Home"),
+        title: Text("home".tr),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -86,7 +84,7 @@ class HomeTemplate extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: AppHeading(
-                      text: "Latest Campaign",
+                      text: "latest camps".tr,
                       widgetSize: WidgetSize.small,
                       color: Constants.appColorGray,
                     ),
@@ -97,7 +95,7 @@ class HomeTemplate extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: snapshot.data![1].docs.length == 0
-                        ? NoDataCardView(title: "No Available Campaigns")
+                        ? NoDataCardView(title: "no available campaigns".tr)
                         : CampaignCardView(
                             title: snapshot.data![1].docs[0]['location'],
                             imgUrl: snapshot.data![1].docs[0]['url'],
@@ -112,7 +110,7 @@ class HomeTemplate extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: AppHeading(
-                      text: "Latest Request",
+                      text: "latest requests".tr,
                       widgetSize: WidgetSize.small,
                       color: Constants.appColorGray,
                     ),
@@ -123,7 +121,7 @@ class HomeTemplate extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: snapshot.data![2].docs.length == 0
-                        ? NoDataCardView(title: "No Available Requests")
+                        ? NoDataCardView(title: "no available requests".tr)
                         : RequestCardView(
                             bloodGroup: snapshot.data![2].docs[0]['bloodGroup'],
                             endTime:

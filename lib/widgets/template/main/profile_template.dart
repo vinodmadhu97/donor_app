@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:get/get.dart';
 
 class ProfileTemplate extends StatefulWidget {
   const ProfileTemplate({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text("profile".tr),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -105,12 +106,12 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                                     text:
                                         snapshot.data!['bloodGroup'].isNotEmpty
                                             ? snapshot.data!['bloodGroup']
-                                            : "N/A",
+                                            : "n/a".tr,
                                     widgetSize: WidgetSize.medium,
                                     color: Constants.appColorBrownRed,
                                   ),
                                   AppLabel(
-                                    text: "Blood group",
+                                    text: "blood group".tr,
                                     widgetSize: WidgetSize.medium,
                                     textColor: Constants.appColorGray,
                                   )
@@ -132,7 +133,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                                     color: Constants.appColorBrownRed,
                                   ),
                                   AppLabel(
-                                      text: "Donations",
+                                      text: "donation count".tr,
                                       widgetSize: WidgetSize.medium,
                                       textColor: Constants.appColorGray)
                                 ],
@@ -149,7 +150,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                         ),
                       ),
                       AppHeading(
-                        text: "Next Donation",
+                        text: "next donation day".tr,
                         widgetSize: WidgetSize.small,
                       ),
                       SizedBox(
@@ -176,7 +177,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                         widgetBuilder: (_, CurrentRemainingTime? time) {
                           if (time == null) {
                             return AppHeading(
-                              text: "Donate Now",
+                              text: "donate now".tr,
                               widgetSize: WidgetSize.small,
                               color: Constants.appColorBrownRed,
                             );
@@ -205,7 +206,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                                       widgetSize: WidgetSize.medium,
                                     ),
                                     AppHeading(
-                                        text: "Days",
+                                        text: "days".tr,
                                         widgetSize: WidgetSize.small)
                                   ],
                                 ),
@@ -228,7 +229,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                                       widgetSize: WidgetSize.medium,
                                     ),
                                     AppHeading(
-                                        text: "Hours",
+                                        text: "hours".tr,
                                         widgetSize: WidgetSize.small)
                                   ],
                                 ),
@@ -263,7 +264,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: AppHeading(
-                  text: "History",
+                  text: "history".tr,
                   widgetSize: WidgetSize.small,
                 ),
               ),
@@ -285,7 +286,7 @@ class _ProfileTemplateState extends State<ProfileTemplate> {
                     }
                     return snapshot.data?.docs.length == 0
                         ? NoDataCardView(
-                            title: "Participate Your First Donation")
+                            title: "participate your first donation".tr)
                         : ListView.builder(
                             itemCount: snapshot.data?.docs.length,
                             shrinkWrap: true,

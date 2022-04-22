@@ -1,15 +1,32 @@
 import 'package:donor_app/const/constants.dart';
-import 'package:donor_app/screens/auth/sign_up_screen.dart';
+import 'package:donor_app/const/widget_size.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:select_form_field/select_form_field.dart';
 
 import '../../../controllers/language_controller.dart';
+import '../../molecules/buttons/outlined_rounded_button.dart';
 
 class OnBoardingTemplate extends StatelessWidget {
   final List<Map<String, String>> items;
   OnBoardingTemplate({Key? key, required this.items}) : super(key: key);
-  final languageController = Get.put(LanguageController());
+  final languageController = Get.find<LanguageController>();
+
+  final List<Map<String, dynamic>> _items = [
+    {
+      'value': 'EN',
+      'label': 'English',
+    },
+    {
+      'value': 'SI',
+      'label': 'සිංහල',
+    },
+    {
+      'value': 'TA',
+      'label': 'தமிழ்',
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +69,104 @@ class OnBoardingTemplate extends StatelessWidget {
   }
 
   void goToHome(context) {
+    String selectedLanguage = "EN";
     print("moved to signup page");
     Constants().setAppInstalledDataInSF(Constants.IS_APP_INSTALLED, true);
     languageController.setLanguage("EN");
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => SignUpScreen()),
+    //languageController.changeLanguage("si", "LK");
+    Get.defaultDialog(
+        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+        title: "Select your language",
+        middleText: "",
+        backgroundColor: Colors.white,
+        titleStyle: TextStyle(color: Constants.appColorBrownRed),
+        middleTextStyle: TextStyle(color: Constants.appColorBlack),
+        textConfirm: "Continue",
+        confirmTextColor: Colors.white,
+        buttonColor: Constants.appColorBrownRed,
+        barrierDismissible: false,
+        radius: 10,
+        content: SizedBox(
+          width: 300,
+          child: SelectFormField(
+            type: SelectFormFieldType.dropdown,
+            // or can be dialog
+            initialValue: selectedLanguage,
+            icon: Icon(Icons.language),
+            labelText: 'language'.tr,
+            items: _items,
+            onChanged: (val) {
+              selectedLanguage = val;
+            },
+          ),
+        ),
+        onConfirm: () {
+          Get.back();
+          languageController.setLanguage(selectedLanguage);
+
+          if (selectedLanguage == "SI") {
+            languageController.setLocale("si", "LK");
+            languageController.changeLanguage("si", "LK");
+          } else if (selectedLanguage == "TA") {
+            languageController.setLocale("ta", "LK");
+            languageController.changeLanguage("ta", "LK");
+          } else {
+            languageController.setLocale("en", "US");
+            languageController.changeLanguage("en", "US");
+          }
+        });
+  }
+
+  Widget bottomSheetLanguage(BuildContext context) {
+    print("------------------->hit");
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.15,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 20,
+      ),
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            width: 300,
+            child: SelectFormField(
+                type: SelectFormFieldType.dropdown,
+                // or can be dialog
+                initialValue: languageController.getLanguage(),
+                icon: Icon(Icons.language),
+                labelText: 'language'.tr,
+                items: _items,
+                onChanged: (val) {
+                  languageController.setLanguage(val);
+                  if (val == "SI") {
+                    languageController.setLocale("si", "LK");
+                  } else if (val == "TA") {
+                    languageController.setLocale("ta", "LK");
+                  } else {
+                    languageController.setLocale("en", "US");
+                  }
+                }
+                //onSaved: (val) => print(val),
+                ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          OutlinedRoundedButton(
+            widgetSize: WidgetSize.small,
+            clickEvent: () {
+              Locale locale = languageController.getLocale()!;
+              languageController.changeLanguage(
+                  locale.languageCode, locale.countryCode!);
+            },
+            text: 'Continue',
+            bgColor: Constants.appColorWhite,
+            textColor: Constants.appColorBrownRed,
+            borderColor: Constants.appColorBrownRed,
+          )
+        ],
+      ),
     );
   }
 

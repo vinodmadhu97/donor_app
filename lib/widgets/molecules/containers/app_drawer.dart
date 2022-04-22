@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:select_form_field/select_form_field.dart';
-import 'package:switcher_button/switcher_button.dart';
+import 'package:system_settings/system_settings.dart';
 
 import '../../../controllers/language_controller.dart';
 
@@ -22,11 +22,11 @@ class AppDrawer extends StatelessWidget {
     },
     {
       'value': 'SI',
-      'label': 'Sinhala',
+      'label': 'සිංහල',
     },
     {
       'value': 'TA',
-      'label': 'Tamil',
+      'label': 'தமிழ்',
     },
   ];
 
@@ -66,15 +66,24 @@ class AppDrawer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SelectFormField(
-                type: SelectFormFieldType.dropdown,
-                // or can be dialog
-                initialValue: languageController.getLanguage(),
-                icon: Icon(Icons.language),
-                labelText: 'Language',
-                items: _items,
-                onChanged: (val) => languageController.setLanguage(val),
-                //onSaved: (val) => print(val),
-              ),
+                  type: SelectFormFieldType.dropdown,
+                  // or can be dialog
+                  initialValue: languageController.getLanguage(),
+                  icon: Icon(Icons.language),
+                  labelText: 'language'.tr,
+                  items: _items,
+                  onChanged: (val) {
+                    languageController.setLanguage(val);
+                    if (val == "SI") {
+                      languageController.changeLanguage("si", "LK");
+                    } else if (val == "TA") {
+                      languageController.changeLanguage("ta", "LK");
+                    } else {
+                      languageController.changeLanguage("en", "US");
+                    }
+                  }
+                  //onSaved: (val) => print(val),
+                  ),
             ),
             Padding(
               padding:
@@ -86,17 +95,14 @@ class AppDrawer extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  AppLabel(text: "Notifications", widgetSize: WidgetSize.large),
+                  InkWell(
+                      onTap: () {
+                        SystemSettings.appNotifications();
+                      },
+                      child: AppLabel(
+                          text: "notification settings".tr,
+                          widgetSize: WidgetSize.large)),
                   Spacer(),
-                  SwitcherButton(
-                    size: 40,
-                    value: true,
-                    onChange: (value) {
-                      print(value);
-                    },
-                    onColor: Constants.appColorBrownRed,
-                    offColor: Constants.appColorGray,
-                  )
                 ],
               ),
             ),
@@ -106,7 +112,10 @@ class AppDrawer extends StatelessWidget {
               child: InkWell(
                 onTap: () {
                   CustomDialogBox.buildOkWithCancelDialog(
-                      description: "Do You want to Logout?",
+                      title: "alert".tr,
+                      description: "do you want to log out".tr,
+                      cancelText: "no".tr,
+                      confirmText: "yes".tr,
                       okOnclick: () async {
                         await FirebaseServices().deleteFcmToken();
                         FirebaseAuth.instance.signOut();
@@ -121,7 +130,7 @@ class AppDrawer extends StatelessWidget {
                       width: 10,
                     ),
                     AppLabel(
-                      text: "Log Out",
+                      text: "logout".tr,
                       widgetSize: WidgetSize.large,
                       textColor: Constants.appColorBrownRed,
                     )
@@ -150,7 +159,7 @@ class AppDrawer extends StatelessWidget {
                       width: 10,
                     ),
                     AppLabel(
-                      text: "About Us",
+                      text: "about us".tr,
                       widgetSize: WidgetSize.large,
                     )
                   ],
@@ -171,7 +180,7 @@ class AppDrawer extends StatelessWidget {
                       width: 10,
                     ),
                     AppLabel(
-                      text: "Who can Donate?",
+                      text: "who can donate".tr,
                       widgetSize: WidgetSize.large,
                     )
                   ],
@@ -191,7 +200,7 @@ class AppDrawer extends StatelessWidget {
                       width: 10,
                     ),
                     AppLabel(
-                      text: "Contact",
+                      text: "contacts".tr,
                       widgetSize: WidgetSize.large,
                     )
                   ],

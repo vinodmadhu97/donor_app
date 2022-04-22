@@ -73,6 +73,8 @@ dependencies:
   firebase_messaging: ^11.2.11
   shimmer: ^2.0.0
   get_storage: ^2.0.3
+  system_settings: ^2.1.0
+
 
 
 
@@ -113,6 +115,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/anim/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

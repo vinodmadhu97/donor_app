@@ -23,13 +23,14 @@ class CustomDialogBox {
             SizedBox(
               height: 10,
             ),
-            AppLabel(text: text ?? "Please wait!", widgetSize: WidgetSize.large)
+            AppLabel(
+                text: text ?? "please wait".tr, widgetSize: WidgetSize.large)
           ],
         ));
   }
 
   static buildOkWithCancelDialog(
-      {String title = "Alert",
+      {String title = "alert",
       required String description,
       String confirmText = "Ok",
       String cancelText = "Cancel",

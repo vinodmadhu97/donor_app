@@ -8,6 +8,8 @@ import 'package:donor_app/widgets/shimmers/campaign_shimmer.dart';
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../const/constants.dart';
 
@@ -32,13 +34,20 @@ class CampaignTemplate extends StatelessWidget {
           return snapshot.data![0].docs.length == 0
               ? Scaffold(
                   appBar: AppBar(
-                    title: Text("Campaigns"),
+                    title: Text("campaigns".tr),
                   ),
                   body: Center(
-                      child: AppHeading(
-                    text: "No Available Campaigns",
-                    widgetSize: WidgetSize.small,
-                    color: Constants.appColorGray,
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Lottie.asset('assets/anim/no_data_anim.json',
+                          width: 200, height: 100),
+                      AppHeading(
+                        text: "no available campaigns".tr,
+                        widgetSize: WidgetSize.small,
+                        color: Constants.appColorGray,
+                      )
+                    ],
                   )),
                 )
               : DraggableHome(

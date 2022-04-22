@@ -39,7 +39,7 @@ class _DashBoardTemplateState extends State<DashBoardTemplate>
 
   @override
   Widget build(BuildContext context) {
-    bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
+    //bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return Scaffold(
       body: NavigationScreen(
         navigationData[_bottomNavIndex]['navScreen'],

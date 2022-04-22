@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebaseStorage;
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class RegisterTemplate extends StatefulWidget {
@@ -110,7 +111,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
         ? LoadingIndicator()
         : Scaffold(
             body: DraggableHome(
-                title: Text("Register"),
+                title: Text("registration".tr),
                 curvedBodyRadius: 0,
                 headerExpandedHeight: 0.35,
                 fullyStretchable: false,
@@ -133,7 +134,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
               padding: const EdgeInsets.only(left: 16.0),
               child: Align(
                 child: AppHeading(
-                  text: "Register",
+                  text: "registration".tr,
                   color: Constants.appColorBrownRed,
                 ),
                 alignment: Alignment.center,
@@ -204,7 +205,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   padding: const EdgeInsets.only(left: 20.0),
                   child: ElevatedButton(
                     onPressed: controller.onStepContinue,
-                    child: Text(isLastStep ? "REGISTER" : "NEXT"),
+                    child: Text(isLastStep ? "register".tr : "next".tr),
                   ),
                 ),
                 SizedBox(
@@ -214,7 +215,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   visible: currentStep != 0,
                   child: ElevatedButton(
                     onPressed: controller.onStepCancel,
-                    child: Text("BACK"),
+                    child: Text("back".tr),
                   ),
                 ),
               ],
@@ -223,47 +224,47 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
         },
         steps: [
           Step(
-              title: Text("Step 1"),
+              title: Text("step".tr + " 1"),
               content: RegisterInputField(
                   formKey: _nameKey,
                   controller: _nameController,
                   inputType: TextInputType.text,
                   validator: MultiValidator(
-                      [RequiredValidator(errorText: '*Required')]),
-                  hintText: "Full name"),
+                      [RequiredValidator(errorText: 'required'.tr)]),
+                  hintText: "full name".tr),
               isActive: currentStep >= 0),
           Step(
-              title: Text("Step 2"),
+              title: Text("step".tr + " 2"),
               content: RegisterInputField(
                   formKey: _nationalIdKey,
                   controller: _nationalIdController,
                   inputType: TextInputType.text,
                   validator: MultiValidator(
-                      [RequiredValidator(errorText: '*Required')]),
-                  hintText: "National Id"),
+                      [RequiredValidator(errorText: 'required'.tr)]),
+                  hintText: "national id".tr),
               isActive: currentStep >= 1),
           Step(
-              title: Text("Step 3"),
+              title: Text("step".tr + " 3"),
               content: RegisterInputField(
                   formKey: _addressKey,
                   controller: _addressController,
                   inputType: TextInputType.text,
                   validator: MultiValidator(
-                      [RequiredValidator(errorText: '*Required')]),
-                  hintText: "Address"),
+                      [RequiredValidator(errorText: 'required'.tr)]),
+                  hintText: "address".tr),
               isActive: currentStep >= 2),
           Step(
-              title: Text("Step 4"),
+              title: Text("step".tr + " 4"),
               content: RegisterInputField(
                   formKey: _phoneKey,
                   controller: _phoneController,
                   inputType: TextInputType.text,
                   validator: MultiValidator(
-                      [RequiredValidator(errorText: '*Required')]),
-                  hintText: "Phone"),
+                      [RequiredValidator(errorText: 'required'.tr)]),
+                  hintText: "phone".tr),
               isActive: currentStep >= 3),
           Step(
-              title: Text("Step 5"),
+              title: Text("step".tr + " 5"),
               content: Form(
                 key: _dobKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -278,7 +279,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                     decoration: InputDecoration(
                       hintStyle: TextStyle(
                           color: Constants.appColorGray, fontSize: 14),
-                      hintText: "Date of Birth",
+                      hintText: "date of birth".tr,
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: BorderSide(
@@ -295,7 +296,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                     ),
                     validator: (value) {
                       if (value!.trim().isEmpty) {
-                        return "* DOB is Required";
+                        return 'required'.tr;
                       } else
                         return null;
                     },
@@ -309,11 +310,11 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
               ),
               isActive: currentStep >= 4),
           Step(
-              title: Text("Step 6"),
+              title: Text("step".tr + " 6"),
               content: Column(
                 children: [
                   Text(
-                    "Gender",
+                    "gender".tr,
                     style: TextStyle(fontSize: 20),
                   ),
                   SizedBox(
@@ -336,7 +337,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                                   });
                                 }),
                           ),
-                          Text("Male", style: TextStyle(fontSize: 16))
+                          Text("male".tr, style: TextStyle(fontSize: 16))
                         ],
                       ),
                       Row(
@@ -354,7 +355,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                                 }),
                           ),
                           Text(
-                            "Female",
+                            "female".tr,
                             style: TextStyle(fontSize: 16),
                           )
                         ],
@@ -373,7 +374,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                                   });
                                 }),
                           ),
-                          Text("Other", style: TextStyle(fontSize: 16))
+                          Text("other".tr, style: TextStyle(fontSize: 16))
                         ],
                       ),
                     ],
@@ -382,11 +383,11 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
               ),
               isActive: currentStep >= 5),
           Step(
-              title: Text("Step 7"),
+              title: Text("step".tr + " 7"),
               content: Column(
                 children: [
                   Text(
-                    "I would like to Donate",
+                    "i would like to donate".tr,
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(
@@ -395,7 +396,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("In every 4 Months time",
+                      Text("in every 4 months time".tr,
                           style: TextStyle(fontSize: 16)),
                       Transform.scale(
                         scale: 1.5,
@@ -414,7 +415,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "In every 6 Months time",
+                        "in every 6 months time".tr,
                         style: TextStyle(fontSize: 16),
                       ),
                       Transform.scale(
@@ -433,7 +434,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("In every 12 Months time",
+                      Text("in every 12 months time".tr,
                           style: TextStyle(fontSize: 16)),
                       Transform.scale(
                         scale: 1.5,
@@ -452,7 +453,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
               ),
               isActive: currentStep >= 6),
           Step(
-              title: Text("Step 8"),
+              title: Text("step".tr + " 8"),
               content: ListTile(
                 leading: Transform.scale(
                   scale: 1.3,
@@ -474,7 +475,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
                     },
                   ),
                 ),
-                title: Text("I agree to Terms & Conditions"),
+                title: Text("i agree to terms & conditions".tr),
               ),
               isActive: currentStep >= 7),
         ],
@@ -500,9 +501,9 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
       child: Column(
         children: <Widget>[
           Text(
-            "Please accept the Terms & Conditions",
+            "please accept the terms & conditions".tr,
             style: TextStyle(
-              fontSize: 20.0,
+              fontSize: 16.0,
             ),
           ),
           SizedBox(
@@ -510,9 +511,9 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
           ),
           InkWell(
             child: Text(
-              "About Terms & Conditions",
+              "about terms & conditions".tr,
               style: TextStyle(
-                  fontSize: 15.0,
+                  fontSize: 12.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.black54),
             ),
@@ -526,7 +527,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
           Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
             InkWell(
               child: Text(
-                "CANCEL",
+                "cancel".tr,
                 style: TextStyle(
                     color: Constants.appColorBrownRed,
                     fontWeight: FontWeight.bold,
@@ -544,7 +545,7 @@ class _RegisterTemplateState extends State<RegisterTemplate> {
               width: 40,
             ),
             InkWell(
-              child: Text("OK",
+              child: Text("accept".tr,
                   style: TextStyle(
                       color: Constants.appColorBrownRed,
                       fontWeight: FontWeight.bold,

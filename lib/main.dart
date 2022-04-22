@@ -1,3 +1,5 @@
+import 'package:donor_app/const/translation_string.dart';
+import 'package:donor_app/controllers/language_controller.dart';
 import 'package:donor_app/controllers/notification_controller.dart';
 import 'package:donor_app/screens/auth/sign_up_screen.dart';
 import 'package:donor_app/screens/main/dash_board_screen.dart';
@@ -47,22 +49,31 @@ void main() async {
   );
   Get.put(NetworkController(), permanent: true);
   Get.put(NotificationController(), permanent: true);
-
+  var languageController = Get.put(LanguageController(), permanent: true);
+  Locale? locale = languageController.getLocale();
+  print("----------------------->main locale ${locale?.languageCode}");
   /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);*/
-  runApp(const MyApp());
+  runApp(MyApp(
+    locale: locale,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final bool _isLogged = false;
   final bool _isAppInstalled = false;
-  const MyApp({Key? key}) : super(key: key);
+  final Locale? locale;
+
+  MyApp({Key? key, this.locale}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
         title: 'Flutter Demo',
+        translations: TranslationString(),
+        locale: locale == null ? Get.deviceLocale : locale,
+        fallbackLocale: Locale('en', "US"),
         theme: ThemeData(
             fontFamily: "Kanit-bold",
             appBarTheme: AppBarTheme(color: Constants.appColorBrownRed),
@@ -108,7 +119,7 @@ class SplashLoading extends StatelessWidget {
 }
 
 class UpComingScreen extends StatelessWidget {
-  const UpComingScreen({Key? key}) : super(key: key);
+  UpComingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

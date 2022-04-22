@@ -3,6 +3,7 @@ import 'package:donor_app/screens/main/BMI_calculation_screen.dart';
 import 'package:donor_app/screens/main/history_screen.dart';
 import 'package:donor_app/widgets/template/main/home_template.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class HomeScreen extends StatelessWidget {
           }
         },*/
         {
-          "title": "History",
+          "title": "history".tr,
           "color": Constants.appColorWhite,
           "imgUrl": "assets/icons/home-menu-5.png",
           "clickEvent": () {
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
           }
         },
         {
-          "title": "BMI",
+          "title": "bmi".tr,
           "color": Constants.appColorWhite,
           "imgUrl": "assets/icons/home-menu-6.png",
           "clickEvent": () {

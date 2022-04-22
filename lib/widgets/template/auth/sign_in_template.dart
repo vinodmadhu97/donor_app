@@ -10,6 +10,7 @@ import 'package:donor_app/widgets/molecules/input_fields/app_password_field.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 
 class SignInTemplate extends StatefulWidget {
   SignInTemplate({Key? key}) : super(key: key);
@@ -77,7 +78,7 @@ class _SignInTemplateState extends State<SignInTemplate> {
                             Padding(
                               padding: const EdgeInsets.only(right: 24),
                               child: Text(
-                                "SIGN IN",
+                                "login".tr,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontFamily: "Kanit-Bold",
@@ -95,6 +96,7 @@ class _SignInTemplateState extends State<SignInTemplate> {
                         margin: EdgeInsets.only(left: 20, right: 20, top: 30),
                         child: SingleChildScrollView(
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               SizedBox(
@@ -106,12 +108,12 @@ class _SignInTemplateState extends State<SignInTemplate> {
                                   inputType: TextInputType.emailAddress,
                                   validator: MultiValidator([
                                     RequiredValidator(
-                                        errorText: "Email is Required"),
+                                        errorText: "email is required".tr),
                                     EmailValidator(
-                                        errorText: "Enter a Valid Email")
+                                        errorText: "enter a valid email".tr)
                                   ]),
                                   iconData: Icons.email,
-                                  hintText: "Email"),
+                                  hintText: "email".tr),
                               SizedBox(
                                 height: 30,
                               ),
@@ -121,19 +123,20 @@ class _SignInTemplateState extends State<SignInTemplate> {
                                 inputType: TextInputType.text,
                                 validator: MultiValidator([
                                   RequiredValidator(
-                                      errorText: "Password is Required"),
+                                      errorText: "password is required".tr),
                                   MinLengthValidator(6,
                                       errorText:
-                                          "password must be at least 6 characters")
+                                          "password must be at least 6 characters"
+                                              .tr)
                                 ]),
                                 iconData: Icons.security,
-                                hintText: "Password",
+                                hintText: "password".tr,
                               ),
                               SizedBox(
                                 height: 40,
                               ),
                               FilledRoundedButton(
-                                  text: "Sign In",
+                                  text: "login".tr,
                                   widgetSize: WidgetSize.large,
                                   clickEvent: () {
                                     //CHECKING THE INPUT DATA VALIDATION
@@ -154,29 +157,38 @@ class _SignInTemplateState extends State<SignInTemplate> {
                               SizedBox(
                                 height: 20,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Already have an Account?"),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  InkWell(
-                                    child: Text(
-                                      "Sign Up",
-                                      style: TextStyle(
-                                          color: Constants.appColorBrownRed),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 50.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                        child:
+                                            Text("do not have an account".tr)),
+                                    SizedBox(
+                                      width: 10,
                                     ),
-                                    onTap: () {
-                                      //todo move to the sign in
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  SignUpScreen()));
-                                      print("sign In");
-                                    },
-                                  )
-                                ],
+                                    Expanded(
+                                      child: InkWell(
+                                        child: Text(
+                                          "signup".tr,
+                                          style: TextStyle(
+                                              color:
+                                                  Constants.appColorBrownRed),
+                                        ),
+                                        onTap: () {
+                                          //todo move to the sign in
+                                          Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          SignUpScreen()));
+                                          print("sign In");
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               )
                             ],
                           ),
