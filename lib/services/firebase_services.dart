@@ -142,6 +142,7 @@ class FirebaseServices {
       'numberOfDonation': "0",
       'nextDonationDate': "",
       'bloodGroup': "",
+      'isDonated': false
     };
 
     if (networkController.connectionStatus.value != ConnectionEnum.noInternet) {

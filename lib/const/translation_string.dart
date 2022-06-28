@@ -107,7 +107,8 @@ class TranslationString extends Translations {
           "Please Select a weight": "Please Select a weight",
           "Please Select a age": "Please Select a age",
           "Result": "Result",
-          "RE-CALCULATE": "RE-CALCULATE"
+          "RE-CALCULATE": "RE-CALCULATE",
+          "allowDonation": "No Allow to Blood donation"
         },
         "si_LK": {
           "home": "මුල් පිටුව",
@@ -213,7 +214,8 @@ class TranslationString extends Translations {
           "Please Select a weight": "කරුණාකර බර තෝරන්න",
           "Please Select a age": "කරුණාකර වයස තෝරන්න",
           "Result": "ප්‍රතිඵලය",
-          "RE-CALCULATE": "නැවත ගණනය කරන්න"
+          "RE-CALCULATE": "නැවත ගණනය කරන්න",
+          "allowDonation": "ලේ පරිත්‍යාගයට අවසර නැත"
         },
         "ta_LK": {
           "home": "முகப்பு பக்கம்",
@@ -321,7 +323,8 @@ class TranslationString extends Translations {
           "Please Select a weight": "எடையைத் தேர்ந்தெடுக்கவும்",
           "Please Select a age": "தயவுசெய்து வயதைத் தேர்ந்தெடுக்கவும்",
           "Result": "விளைவாக",
-          "RE-CALCULATE": "மீண்டும் கணக்கிடு"
+          "RE-CALCULATE": "மீண்டும் கணக்கிடு",
+          "allowDonation": "இரத்த தானம் செய்ய அனுமதி இல்லை"
         },
       };
 }

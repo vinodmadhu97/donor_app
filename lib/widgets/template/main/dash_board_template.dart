@@ -1,8 +1,14 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:donor_app/const/constants.dart';
+import 'package:donor_app/const/custom_dialog_box.dart';
+import 'package:donor_app/const/custom_snack_bar.dart';
+import 'package:donor_app/services/firebase_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../../../screens/main/donation_qr_screen.dart';
 
@@ -53,9 +59,18 @@ class _DashBoardTemplateState extends State<DashBoardTemplate>
             Icons.qr_code,
             color: Constants.appColorWhite,
           ),
-          onPressed: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => DonationQRScreen()));
+          onPressed: () async {
+            CustomDialogBox.buildDialogBox();
+            DocumentSnapshot doc = await FirebaseServices()
+                .getDonorData(FirebaseAuth.instance.currentUser!.uid);
+            Get.back();
+            if (doc['isDonated']) {
+              CustomSnackBar.buildSnackBar(
+                  title: "error".tr, message: "allowDonation".tr);
+            } else {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => DonationQRScreen()));
+            }
           },
         ),
       ),

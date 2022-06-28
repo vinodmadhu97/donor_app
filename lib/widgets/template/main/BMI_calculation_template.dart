@@ -32,8 +32,8 @@ class _BMICalculationTemplateState extends State<BMICalculationTemplate> {
         title: Text("BMI " + "CALCULATOR".tr),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(children: [
             SizedBox(
               height: 20,
@@ -192,7 +192,8 @@ class _BMICalculationTemplateState extends State<BMICalculationTemplate> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
               child: BottomButton(
                 btnTitleText: "CALCULATE".tr,
                 onTapOp: () {

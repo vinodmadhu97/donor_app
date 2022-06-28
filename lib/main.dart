@@ -12,6 +12,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'const/constants.dart';
 import 'controllers/network_controller.dart';
@@ -35,6 +36,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await GetStorage.init('donorData');
 
   //HANDLE BACKGROUND NOTIFICATION
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -52,6 +54,7 @@ void main() async {
   var languageController = Get.put(LanguageController(), permanent: true);
   Locale? locale = languageController.getLocale();
   print("----------------------->main locale ${locale?.languageCode}");
+
   /*SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);*/
   runApp(MyApp(
